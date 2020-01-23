@@ -4,3 +4,6 @@ mongo:
   authentication:
     username: ""
     password: ""
+trade:
+  distance: 10
+  expire-time: 30 # seconds

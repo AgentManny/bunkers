@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.minevale.bunkers.core.command.TradeCommand;
 import org.minevale.bunkers.core.listener.PlayerSyncListener;
 import org.minevale.bunkers.core.player.PlayerDataManager;
 import org.minevale.bunkers.core.util.serializer.ItemStackAdapter;
@@ -64,7 +65,7 @@ public class BunkersCore extends JavaPlugin {
     }
 
     private void registerCommands() {
-
+        getCommand("trade").setExecutor(new TradeCommand());
     }
 
     private void registerListeners() {

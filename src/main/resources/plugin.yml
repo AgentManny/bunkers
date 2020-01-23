@@ -3,3 +3,7 @@ main: org.minevale.bunkers.core.BunkersCore
 version: ${git.commit.id.abbrev}
 author: Manny
 commands:
+  trade:
+    usage: "/trade <player>"
+    description: "Trading used to exchange items for currency between players"
+    permission: "bunkers.command.trade"
