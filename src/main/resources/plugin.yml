@@ -1,0 +1,4 @@
+name: "Bunkers-core"
+main: org.minevale.bunkers.core.BunkersCore
+version: ${git.commit.id.abbrev}
+commands:
