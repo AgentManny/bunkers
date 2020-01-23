@@ -43,11 +43,11 @@ public class BunkersCore extends JavaPlugin {
         saveDefaultConfig();
         getConfig().options().copyDefaults(true);
 
+        loadDatabase();
+
         registerCommands();
         registerManagers();
         registerListeners();
-
-        loadDatabase();
     }
 
     public void onDisable() {
