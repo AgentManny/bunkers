@@ -41,6 +41,10 @@ public class PlayerData {
         this.coins = balanceData.getInteger("coins", 0);
         this.nuggets = balanceData.getInteger("nuggets", 0);
         this.bars = balanceData.getInteger("bars", 0);
+
+        if (document.containsKey("inventory")) {
+            this.inventoryData = PlayerInventoryData.deserialize(document.get("inventory", Document.class).toJson()); // Should try to simplify
+        }
     }
 
     public void save() {
@@ -49,13 +53,19 @@ public class PlayerData {
     }
 
     public Document toDocument() {
+        Document document = new Document("uuid", uuid.toString())
+                .append("username", username);
+
         Document balanceData = new Document("coins", coins)
                 .append("nuggets", nuggets)
                 .append("bars", bars);
+        document.append("balance", balanceData);
 
-        return new Document("uuid", uuid.toString())
-                .append("username", username)
-                .append("balance", balanceData);
+        Player player = getPlayer();
+        if (player != null) {
+            document.append("inventory", PlayerInventoryData.serialize(getPlayer()));
+        }
+        return document;
     }
 
     public Player getPlayer() {
