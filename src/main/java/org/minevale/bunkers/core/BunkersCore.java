@@ -13,9 +13,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
+import org.minevale.bunkers.core.listener.PlayerSyncListener;
 import org.minevale.bunkers.core.player.PlayerDataManager;
 import org.minevale.bunkers.core.util.serializer.ItemStackAdapter;
 import org.minevale.bunkers.core.util.serializer.PotionEffectAdapter;
+
+import java.util.Arrays;
 
 @Getter
 public class BunkersCore extends JavaPlugin {
@@ -65,9 +68,9 @@ public class BunkersCore extends JavaPlugin {
     }
 
     private void registerListeners() {
-//        Arrays.asList(
-//                new PlayerListener(this)
-//        ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
+        Arrays.asList(
+                new PlayerSyncListener(this)
+        ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 
     public static void broadcast(String message) {
