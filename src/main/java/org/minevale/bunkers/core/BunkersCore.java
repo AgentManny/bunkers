@@ -1,5 +1,7 @@
 package org.minevale.bunkers.core;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
@@ -8,11 +10,22 @@ import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
 import org.minevale.bunkers.core.player.PlayerDataManager;
+import org.minevale.bunkers.core.util.serializer.ItemStackAdapter;
+import org.minevale.bunkers.core.util.serializer.PotionEffectAdapter;
 
 @Getter
 public class BunkersCore extends JavaPlugin {
+
+    public static final Gson GSON = new GsonBuilder()
+            .registerTypeHierarchyAdapter(PotionEffect.class, new PotionEffectAdapter())
+            .registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter())
+            .setPrettyPrinting()
+            .serializeNulls()
+            .create();
 
     @Getter
     private static BunkersCore instance;
