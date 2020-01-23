@@ -22,17 +22,15 @@ public class PlayerInventoryData {
     private final ItemStack[] contents;
 
     public PlayerInventoryData(Player player) {
-        int i;
-        ItemStack stack;
         this.contents = player.getInventory().getContents();
-        for (i = 0; i < this.contents.length; ++i) {
-            stack = this.contents[i];
+        for (int i = 0; i < this.contents.length; ++i) {
+            ItemStack stack = this.contents[i];
             if (stack != null) continue;
             this.contents[i] = new ItemStack(Material.AIR, 0, (short) 0);
         }
         this.armor = player.getInventory().getArmorContents();
-        for (i = 0; i < this.armor.length; ++i) {
-            stack = this.armor[i];
+        for (int i = 0; i < this.armor.length; ++i) {
+            ItemStack stack = this.armor[i];
             if (stack != null) continue;
             this.armor[i] = new ItemStack(Material.AIR, 0, (short) 0);
         }
