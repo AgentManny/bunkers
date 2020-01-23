@@ -17,16 +17,15 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        PlayerData playerData = plugin.getPlayerDataManager().create(new PlayerData(player.getUniqueId(), player.getName()), false);
-
         player.sendMessage(ChatColor.GREEN + "Syncing player data...");
+        PlayerData playerData = plugin.getPlayerDataManager().create(new PlayerData(player.getUniqueId(), player.getName()), false);
+        playerData.setSyncing(false);
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         PlayerData playerData = plugin.getPlayerDataManager().getPlayerData(player);
-
 
         plugin.getPlayerDataManager().save(playerData);
     }

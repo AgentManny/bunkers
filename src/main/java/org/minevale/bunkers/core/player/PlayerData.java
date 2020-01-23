@@ -25,7 +25,7 @@ public class PlayerData {
     private int nuggets = 0;
     private int bars = 0;
 
-    private boolean syncing = false; // Do not allow anyone to do anything before they're synced
+    private boolean syncing = true; // Do not allow anyone to do anything before they're synced
     private boolean needsSaving = false;
 
     public void update(Document document) {
