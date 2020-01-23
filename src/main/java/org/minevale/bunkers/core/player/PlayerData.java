@@ -64,7 +64,7 @@ public class PlayerData {
 
         Player player = getPlayer();
         if (player != null) {
-            document.append("inventory", PlayerInventoryData.serialize(getPlayer()));
+            document.append("inventory", PlayerInventoryData.getAsDocument(player));
         }
         return document;
     }

@@ -19,7 +19,13 @@ public class PlayerListener implements Listener {
         Player player = event.getPlayer();
         player.sendMessage(ChatColor.GREEN + "Syncing player data...");
         PlayerData playerData = plugin.getPlayerDataManager().create(new PlayerData(player.getUniqueId(), player.getName()), false);
+
+        if (playerData.getInventoryData() != null) {
+            playerData.getInventoryData().apply(player);
+            player.sendMessage(ChatColor.GREEN + "Synced data.");
+        }
         playerData.setSyncing(false);
+
     }
 
     @EventHandler
