@@ -7,3 +7,7 @@ commands:
     usage: "/trade <player>"
     description: "Trading used to exchange items for currency between players"
     permission: "bunkers.command.trade"
+  debug:
+    usage: "/debug balance"
+    description: "Debug command for bunkers core"
+    permission: "bunkers.core.admin"

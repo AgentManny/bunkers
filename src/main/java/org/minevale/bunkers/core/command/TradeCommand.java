@@ -39,8 +39,8 @@ public class TradeCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You need to be within " + tradeDistance + " blocks to trade with this player.");
             return true;
         }
-     
-        PlayerTradeRequest.createTradeRequest((Player) sender, target);
+
+        PlayerTradeRequest.createTradeRequest(player, target);
         return true;
     }
 }

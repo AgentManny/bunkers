@@ -7,9 +7,13 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
+import org.minevale.bunkers.core.player.balance.Balance;
 import org.minevale.bunkers.core.player.inventory.PlayerInventoryData;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Getter
 @Setter
@@ -21,9 +25,8 @@ public class PlayerData {
 
     private PlayerInventoryData inventoryData;
 
-    private int coins = 0;
-    private int nuggets = 0;
-    private int bars = 0;
+    private Map<Balance, Integer> balanceMap = new HashMap<>();
+    private long lastBalanceCheck = -1; // This could be a simple solution for continuously updating balance
 
     private boolean syncing = true; // Do not allow anyone to do anything before they're synced
     private boolean needsSaving = false;
@@ -33,15 +36,17 @@ public class PlayerData {
             Player player = getPlayer();
             if (player != null) {
                 this.inventoryData = new PlayerInventoryData(player);
+                recalculateBalance();
             }
             save(); // Saves to disk
             return;
         }
 
         Document balanceData = document.get("balance", Document.class);
-        this.coins = balanceData.getInteger("coins", 0);
-        this.nuggets = balanceData.getInteger("nuggets", 0);
-        this.bars = balanceData.getInteger("bars", 0);
+        for (Balance balance : Balance.values()) {
+            balanceMap.put(balance, balanceData.getInteger(balance.getId(), 0));
+        }
+        recalculateBalance();
 
         if (document.containsKey("inventory")) {
             this.inventoryData = PlayerInventoryData.deserialize(document.get("inventory", Document.class).toJson()); // Should try to simplify
@@ -57,9 +62,11 @@ public class PlayerData {
         Document document = new Document("uuid", uuid.toString())
                 .append("username", username);
 
-        Document balanceData = new Document("coins", coins)
-                .append("nuggets", nuggets)
-                .append("bars", bars);
+        recalculateBalance();
+        Document balanceData = new Document();
+        for (Balance balance : Balance.values()) {
+            balanceData.put(balance.getId(), balanceMap.getOrDefault(balance, 0));
+        }
         document.append("balance", balanceData);
 
         Player player = getPlayer();
@@ -67,6 +74,33 @@ public class PlayerData {
             document.append("inventory", PlayerInventoryData.getAsDocument(player));
         }
         return document;
+    }
+
+    public void recalculateBalance() {
+        if (lastBalanceCheck + 150L > System.currentTimeMillis()) {
+            return;
+        }
+        lastBalanceCheck = System.currentTimeMillis() + 150L;
+        Player player = getPlayer();
+        if (player != null) {
+            inventoryData.update(player);
+        }
+
+        for (Balance balance : Balance.values()) {
+            balanceMap.put(balance, balance.getAmountFromInventory(inventoryData));
+        }
+    }
+
+    public int getBalance() {
+        recalculateBalance(); // Prevent too many updates
+        AtomicInteger amount = new AtomicInteger();
+        balanceMap.forEach((balance, value) -> amount.addAndGet(value));
+        return amount.get();
+    }
+
+    public int getBalance(Balance balance) {
+        recalculateBalance();
+        return balanceMap.getOrDefault(balance, 0);
     }
 
     public Player getPlayer() {
