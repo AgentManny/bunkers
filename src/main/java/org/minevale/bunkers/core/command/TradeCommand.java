@@ -1,6 +1,5 @@
 package org.minevale.bunkers.core.command;
 
-import mkremins.fanciful.FancyMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -8,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
+import org.minevale.bunkers.core.trade.player.PlayerTradeRequest;
 
 public class TradeCommand implements CommandExecutor {
 
@@ -35,22 +35,12 @@ public class TradeCommand implements CommandExecutor {
         }
 
         int tradeDistance = BunkersCore.getInstance().getConfig().getInt("trade.distance", 10);
-        if(player.getNearbyEntities(tradeDistance, tradeDistance, tradeDistance)
-                .stream()
-                .anyMatch(entity -> entity instanceof Player && entity.getUniqueId() == target.getUniqueId())) {
-
-            sender.sendMessage(ChatColor.GREEN + "You've sent a trade request to " + target.getName() + ", it'll expire in " + BunkersCore.getInstance().getConfig().getInt("trade.expire-time", 30) + " seconds.");
-
-            new FancyMessage("You've received a trade request from " + sender.getName() + ". ")
-                    .color(ChatColor.GREEN)
-                    .then("Click Here or type /trade " + sender.getName() + " to accept")
-                    .tooltip(ChatColor.AQUA + "Accept trade from " + sender.getName())
-                    .command("/trade " + sender.getName())
-                    .color(ChatColor.GREEN)
-                    .send(target);
-        } else {
+        if (target.getLocation().distance(player.getLocation()) > 10) {
             sender.sendMessage(ChatColor.RED + "You need to be within " + tradeDistance + " blocks to trade with this player.");
+            return true;
         }
+     
+        PlayerTradeRequest.createTradeRequest((Player) sender, target);
         return true;
     }
 }
