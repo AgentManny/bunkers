@@ -7,7 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
-import org.minevale.bunkers.core.trade.player.PlayerTradeRequest;
 
 public class TradeCommand implements CommandExecutor {
 
@@ -40,7 +39,8 @@ public class TradeCommand implements CommandExecutor {
             return true;
         }
 
-        PlayerTradeRequest.createTradeRequest(player, target);
+
+        BunkersCore.getInstance().getTradeManager().createTradeRequest(player, target);
         return true;
     }
 }

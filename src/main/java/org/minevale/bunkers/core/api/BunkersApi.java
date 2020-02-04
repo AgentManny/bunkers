@@ -1,6 +1,9 @@
 package org.minevale.bunkers.core.api;
 
 import org.bukkit.entity.Player;
+import org.minevale.bunkers.core.api.exception.InsufficientFundsException;
+import org.minevale.bunkers.core.api.exception.InventoryFullException;
+import org.minevale.bunkers.core.player.balance.Balance;
 
 public interface BunkersApi {
 
@@ -21,6 +24,19 @@ public interface BunkersApi {
      * @return total sum of coins removed
      */
     int clearBalance(Player player);
+
+    /**
+     * Removes all coins, nuggets and bars from the players inventory.
+     *
+     * @param player Player balance to clear
+     *
+     * @return total sum of coins removed
+     */
+    int clearBalance(Player player, Balance balance);
+
+    int addCurrency(Player player, Balance balance, int amount) throws InventoryFullException;
+
+    int removeCurrency(Player player, Balance balance, int amount) throws InsufficientFundsException;
 
     /**
      * Balance of the player including only coins.

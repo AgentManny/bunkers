@@ -1,6 +1,5 @@
 package org.minevale.bunkers.core.player;
 
-import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,10 +8,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.minevale.bunkers.core.BunkersCore;
 
-@RequiredArgsConstructor
 public class PlayerListener implements Listener {
 
     private final BunkersCore plugin;
+
+    public PlayerListener(BunkersCore plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {

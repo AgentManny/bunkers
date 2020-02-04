@@ -46,7 +46,6 @@ public class PlayerData {
         for (Balance balance : Balance.values()) {
             balanceMap.put(balance, balanceData.getInteger(balance.getId(), 0));
         }
-        recalculateBalance();
 
         if (document.containsKey("inventory")) {
             this.inventoryData = PlayerInventoryData.deserialize(document.get("inventory", Document.class).toJson()); // Should try to simplify
@@ -62,7 +61,6 @@ public class PlayerData {
         Document document = new Document("uuid", uuid.toString())
                 .append("username", username);
 
-        recalculateBalance();
         Document balanceData = new Document();
         for (Balance balance : Balance.values()) {
             balanceData.put(balance.getId(), balanceMap.getOrDefault(balance, 0));

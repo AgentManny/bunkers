@@ -7,3 +7,17 @@ mongo:
 trade:
   distance: 10
   expire-time: 30 # seconds
+currency:
+  items:
+    nugget:
+      name: "&6Nuggets"
+      lore:
+        - "&7Golden Nuggets"
+    bars:
+      name: "&6&lBars"
+      lore:
+        - "&7Golden Ingot"
+    coins:
+      name: "&eCoins"
+      lore:
+        - "&7Sunflower"

@@ -1,12 +1,14 @@
 package org.minevale.bunkers.core.api;
 
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.minevale.bunkers.core.BunkersCore;
+import org.minevale.bunkers.core.api.exception.InsufficientFundsException;
+import org.minevale.bunkers.core.api.exception.InventoryFullException;
 import org.minevale.bunkers.core.player.PlayerData;
 import org.minevale.bunkers.core.player.balance.Balance;
+import org.minevale.bunkers.core.util.InventoryUtils;
 
 @RequiredArgsConstructor
 public class BunkersCoreApi implements BunkersApi {
@@ -29,14 +31,48 @@ public class BunkersCoreApi implements BunkersApi {
         int balanceBefore = playerData.getBalance();
 
         for (Balance balance : Balance.values()) {
-            for (ItemStack item : player.getInventory().getContents()) {
-                if (item.getType() == balance.getType()) {
-                    item.setType(Material.AIR);
-                    item.setAmount(0);
-                }
+            while (player.getInventory().contains(balance.getType())) {
+                player.getInventory().remove(balance.getType());
             }
         }
+        player.updateInventory();
         return balanceBefore;
+    }
+
+    @Override
+    public int clearBalance(Player player, Balance balance) {
+        PlayerData playerData = getPlayerData(player);
+        int balanceBefore = playerData.getBalance(balance);
+
+        while (player.getInventory().contains(balance.getType())) {
+            player.getInventory().remove(balance.getType());
+        }
+
+        player.updateInventory();
+        return balanceBefore;
+    }
+
+    @Override
+    public int addCurrency(Player player, Balance balance, int amount) throws InventoryFullException {
+        ItemStack item = balance.getItem().clone();
+        item.setAmount(amount);
+        if (InventoryUtils.fits(item, player.getInventory())) {
+            player.getInventory().addItem(item);
+            return amount;
+        }
+        throw new InventoryFullException(player, player.getInventory(), item);
+    }
+
+    @Override
+    public int removeCurrency(Player player, Balance balance, int amount) throws InsufficientFundsException {
+        PlayerData playerData = getPlayerData(player);
+        int contains = playerData.getBalance(balance);
+        if (contains < amount) {
+            throw new InsufficientFundsException(player, balance, amount);
+        }
+
+        player.getInventory().removeAmount(balance.getType(), amount);
+        return amount;
     }
 
     @Override

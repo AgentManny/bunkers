@@ -11,3 +11,8 @@ commands:
     usage: "/debug balance"
     description: "Debug command for bunkers core"
     permission: "bunkers.core.admin"
+  economy:
+    usage: "/economy <balance|clear|give|remove> <player> [currency]"
+    aliases: ["eco"]
+    description: "Economy management for bunkers core"
+    permission: "bunkers.core.admin"

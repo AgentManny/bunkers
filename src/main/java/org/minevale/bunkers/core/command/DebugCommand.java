@@ -1,10 +1,14 @@
 package org.minevale.bunkers.core.command;
 
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.minevale.bunkers.core.BunkersCore;
+import org.minevale.bunkers.core.player.PlayerData;
+import org.minevale.bunkers.core.player.balance.Balance;
 
 public class DebugCommand implements CommandExecutor {
 
@@ -15,15 +19,19 @@ public class DebugCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+        PlayerData playerData = BunkersCore.getInstance().getPlayerDataManager().getPlayerData(player);
         if (args.length == 0) {
             sender.sendMessage(ChatColor.RED + "Usage: /debug balance");
             return true;
         }
 
         if (args[0].equalsIgnoreCase("balance")) {
-
+            sender.sendMessage(ChatColor.GREEN.toString() + "Your balance: " + playerData.getBalance());
+            for (Balance balance : Balance.values()) {
+                sender.sendMessage(ChatColor.YELLOW + balance.getFriendlyName() + " : " + ChatColor.WHITE + playerData.getBalance(balance));
+            }
         } else {
-            sender.sendMessage(ChatColor.RED + "Sub-command " + label + " " + args[0] + " not found.");
+            sender.sendMessage(ChatColor.RED + "Command argument /" + label + " " + args[0] + " not found.");
         }
 
         return true;
