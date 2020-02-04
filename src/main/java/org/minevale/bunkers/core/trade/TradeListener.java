@@ -40,24 +40,26 @@ public class TradeListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         PlayerTrade playerTrade = tradeManager.getActiveTrade(player);
         if (playerTrade != null && event.getClickedInventory() != null) {
+            if (event.isShiftClick()) {
+                event.setResult(Event.Result.DENY); // Temporarily fix to prevent items glitching or randomly disappearing
+                event.setCancelled(true);
+                return;
+            }
             PlayerTradeState tradeState = playerTrade.getPlayerState().get(player);
             if (event.getClickedInventory().equals(playerTrade.getInventoryByPlayer(player))) { // Allow editing player inventory
-                if (playerTrade.getDivider().contains(event.getSlot())) { // Ready up state
-                    if (playerTrade.canConfirm()) {
-                        playerTrade.setPlayerState(player, PlayerTradeState.CONFIRM);
-                    } else if (tradeState != PlayerTradeState.UNREADY) {
-                        playerTrade.setPlayerState(player, PlayerTradeState.UNREADY);
-                    } else {
-                        playerTrade.setPlayerState(player, PlayerTradeState.READY);
-                    }
-                }
-
                 if (playerTrade.getEditableSlots().contains(event.getSlot()) && !(playerTrade.canConfirm())) {
-                    if (event.getCurrentItem() != null) {
-
-                        playerTrade.setPlayerState(player, PlayerTradeState.UNREADY); // todo fix glitches
-                    }
+                    // todo add solution to unready when people quickly add items
                 } else {
+                    if (playerTrade.getDivider().contains(event.getSlot())) { // Ready up state
+                        if (playerTrade.canConfirm()) {
+                            playerTrade.setPlayerState(player, PlayerTradeState.CONFIRM);
+                        } else if (tradeState != PlayerTradeState.UNREADY) {
+                            playerTrade.setPlayerState(player, PlayerTradeState.UNREADY);
+                        } else {
+                            playerTrade.setPlayerState(player, PlayerTradeState.READY);
+                        }
+                    }
+
                     event.setCancelled(true);
                     event.setResult(Event.Result.DENY);
                 }
@@ -72,6 +74,7 @@ public class TradeListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         PlayerTrade playerTrade = tradeManager.getActiveTrade(player);
         if (playerTrade != null && event.getView() != null && event.getView().getTopInventory() != null) {
+            /*
             if (event.getView().getTopInventory().equals(playerTrade.getInventoryByPlayer(player))) { // Allow editing player inventory
                 for (Integer slot : event.getInventorySlots()) {
                     if (playerTrade.getEditableSlots().contains(slot)) { // todo improve solution becomes slightly glitchy with bottom inventory
@@ -81,6 +84,10 @@ public class TradeListener implements Listener {
                     }
                 }
             }
+           */
+            // Dragging causes too much issues
+            event.setResult(Event.Result.DENY);
+            event.setCancelled(true);
         }
     }
 
