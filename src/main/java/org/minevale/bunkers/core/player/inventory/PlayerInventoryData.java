@@ -22,21 +22,7 @@ public class PlayerInventoryData {
     private ItemStack[] contents;
 
     public PlayerInventoryData(Player player) {
-        this.contents = player.getInventory().getContents();
-        for (int i = 0; i < this.contents.length; ++i) {
-            ItemStack stack = this.contents[i];
-            if (stack != null) continue;
-            this.contents[i] = new ItemStack(Material.AIR, 0, (short) 0);
-        }
-        this.armor = player.getInventory().getArmorContents();
-        for (int i = 0; i < this.armor.length; ++i) {
-            ItemStack stack = this.armor[i];
-            if (stack != null) continue;
-            this.armor[i] = new ItemStack(Material.AIR, 0, (short) 0);
-        }
-        this.effects = player.getActivePotionEffects().toArray(new PotionEffect[0]);
-        this.health = (int) player.getHealth();
-        this.hunger = player.getFoodLevel();
+        update(player);
     }
 
     public void update(Player player) {
