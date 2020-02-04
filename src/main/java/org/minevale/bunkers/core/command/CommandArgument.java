@@ -8,4 +8,8 @@ public interface CommandArgument {
 
     String usage();
 
+    default String permission() {
+        return "";
+    }
+
 }

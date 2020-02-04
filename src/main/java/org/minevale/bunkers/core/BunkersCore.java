@@ -17,6 +17,7 @@ import org.minevale.bunkers.core.api.BunkersApi;
 import org.minevale.bunkers.core.api.BunkersCoreApi;
 import org.minevale.bunkers.core.command.DebugCommand;
 import org.minevale.bunkers.core.command.TradeCommand;
+import org.minevale.bunkers.core.command.chat.ChatCommand;
 import org.minevale.bunkers.core.command.economy.EconomyCommand;
 import org.minevale.bunkers.core.listener.PlayerSyncListener;
 import org.minevale.bunkers.core.player.PlayerDataManager;
@@ -83,6 +84,7 @@ public class BunkersCore extends JavaPlugin {
         getCommand("trade").setExecutor(new TradeCommand());
         getCommand("debug").setExecutor(new DebugCommand());
         getCommand("economy").setExecutor(new EconomyCommand());
+        getCommand("chat").setExecutor(new ChatCommand());
     }
 
     private void registerListeners() {

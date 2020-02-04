@@ -1,4 +1,4 @@
-package org.minevale.bunkers.core.command.economy;
+package org.minevale.bunkers.core.command.chat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -10,15 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class EconomyCommand implements CommandExecutor {
+public class ChatCommand implements CommandExecutor {
 
     private Map<String, CommandArgument> arguments = new HashMap<>();
 
-    public EconomyCommand() {
-        arguments.put("balance", new EconomyBalanceArgument());
-        arguments.put("clear", new EconomyClearArgument());
-        arguments.put("add", new EconomyAddArgument());
-        arguments.put("remove", new EconomyRemoveArgument());
+    public ChatCommand() {
+        arguments.put("clear", new ChatClearArgument());
+    //    arguments.put("lock", new ChatLockArgument());
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -34,12 +32,7 @@ public class EconomyCommand implements CommandExecutor {
                 .findAny();
 
         if (argument.isPresent()) {
-            CommandArgument arg = argument.get().getValue();
-            if (!arg.permission().isEmpty() && !sender.hasPermission(arg.permission())) {
-                sender.sendMessage(ChatColor.RED + "You don't have permission to use /" + label + " " + arg.usage() + "!");
-                return true;
-            }
-            arg.execute(sender, args);
+            argument.get().getValue().execute(sender, args);
         } else {
             sender.sendMessage(ChatColor.RED + "Command argument /" + label + " " + args[0] + " not found.");
         }
