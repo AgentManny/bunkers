@@ -52,6 +52,10 @@ public class PlayerData {
         if (document.containsKey("inventory")) {
             this.inventoryData = PlayerInventoryData.deserialize(document.get("inventory", Document.class).toJson()); // Should try to simplify
         }
+
+        if (document.containsKey("bunker")) {
+            this.playerBunker = PlayerBunker.deserialize(document.get("bunker", Document.class).toJson()); // Should try to simplify
+        }
     }
 
     public void save() {
@@ -74,6 +78,7 @@ public class PlayerData {
             inventoryData.update(player); // Resynchronise
         }
         document.append("inventory", PlayerInventoryData.getAsDocument(inventoryData));
+        document.append("bunker", PlayerBunker.getAsDocument(playerBunker));
         return document;
     }
 
