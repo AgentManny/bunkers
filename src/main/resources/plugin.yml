@@ -2,6 +2,7 @@ name: "bunkers-core"
 main: org.minevale.bunkers.core.BunkersCore
 version: ${git.commit.id.abbrev}
 author: Manny
+depend: [WorldEdit]
 commands:
   trade:
     usage: "/trade <player>"
