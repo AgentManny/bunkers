@@ -39,6 +39,7 @@ public class PlayerData {
             if (player != null) {
                 this.inventoryData = new PlayerInventoryData(this);
                 recalculateBalance();
+                this.playerBunker = BunkersCore.getInstance().getBunkerHandler().createBunker(this); // Create random for now
             }
             save(); // Saves to disk
             return;

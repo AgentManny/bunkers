@@ -1,6 +1,5 @@
 package org.minevale.bunkers.core.player;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,15 +18,12 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        player.sendMessage(ChatColor.GREEN + "Syncing player data...");
         PlayerData playerData = plugin.getPlayerDataManager().create(new PlayerData(player.getUniqueId(), player.getName()), false);
-
         if (playerData.getInventoryData() != null) {
             playerData.getInventoryData().apply(player);
-            player.sendMessage(ChatColor.GREEN + "Synced data.");
         }
-        playerData.setSyncing(false);
 
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> playerData.setSyncing(false), 10L);
     }
 
     @EventHandler

@@ -7,6 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.minevale.bunkers.core.BunkersCore;
@@ -41,6 +42,15 @@ public class PlayerSyncListener implements Listener {
     }
 
     @EventHandler
+    public void onMove(PlayerDropItemEvent event) {
+        Player player = event.getPlayer();
+        PlayerData playerData = plugin.getPlayerDataManager().getPlayerData(player);
+        if (playerData.isSyncing()) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     public void onClick(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         PlayerData playerData = plugin.getPlayerDataManager().getPlayerData(player);
@@ -50,5 +60,6 @@ public class PlayerSyncListener implements Listener {
             player.sendMessage(DENY_MESSAGE);
         }
     }
+
 
 }
