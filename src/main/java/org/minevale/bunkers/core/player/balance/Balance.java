@@ -57,7 +57,7 @@ public enum Balance {
     public int getAmountFromInventory(PlayerInventoryData inventoryData) {
         int amount = 0;
         for (ItemStack item : inventoryData.getContents()) {
-            if (item.getType() == type) {
+            if (item != null && item.getType() == type) {
                 amount += item.getAmount();
             }
         }

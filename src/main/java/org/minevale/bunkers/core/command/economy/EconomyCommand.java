@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.command.CommandArgument;
 
 import java.util.HashMap;
@@ -39,7 +40,9 @@ public class EconomyCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "You don't have permission to use /" + label + " " + arg.usage() + "!");
                 return true;
             }
-            arg.execute(sender, args);
+
+            // Run asynchronous to prevent main thread from ever freezing up looking up offline players
+            BunkersCore.getInstance().getServer().getScheduler().runTaskAsynchronously(BunkersCore.getInstance(), () -> arg.execute(sender, args));
         } else {
             sender.sendMessage(ChatColor.RED + "Command argument /" + label + " " + args[0] + " not found.");
         }

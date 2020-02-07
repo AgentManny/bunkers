@@ -4,6 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
@@ -86,9 +87,15 @@ public class PlayerDataManager {
             return getPlayerData(player.getUniqueId());
         }
 
+        if (!plugin.getServer().isPrimaryThread()) {
+            plugin.getLogger().warning("Loading offline player on main thread. This isn't advised as it may cause main server to freeze up.");
+        }
+
         Document document = mongoCollection.find(Filters.eq("username", playerName)).first();
         if (document != null) {
-            return new PlayerData(UUID.fromString(document.getString("uuid")), document.getString("username"));
+            PlayerData playerData = new PlayerData(UUID.fromString(document.getString("uuid")), document.getString("username"));
+            playerData.update(document);
+            return playerData;
         }
         return null;
     }

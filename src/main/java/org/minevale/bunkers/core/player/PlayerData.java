@@ -69,11 +69,9 @@ public class PlayerData {
 
         Player player = getPlayer();
         if (player != null) {
-            if (inventoryData != null) {
-                inventoryData.apply(player); // Resynchronise
-                document.append("inventory", PlayerInventoryData.getAsDocument(inventoryData));
-            }
+            inventoryData.update(player); // Resynchronise
         }
+        document.append("inventory", PlayerInventoryData.getAsDocument(inventoryData));
         return document;
     }
 
