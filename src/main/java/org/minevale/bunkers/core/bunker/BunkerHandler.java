@@ -7,7 +7,6 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.minevale.bunkers.core.BunkersCore;
-import org.minevale.bunkers.core.bunker.grid.BunkerGrid;
 
 import java.io.File;
 import java.util.HashMap;

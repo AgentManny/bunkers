@@ -1,4 +1,4 @@
-package org.minevale.bunkers.core.bunker.grid;
+package org.minevale.bunkers.core.bunker;
 
 import com.sk89q.worldedit.Vector;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package org.minevale.bunkers.core.bunker.cuboid;
+package org.minevale.bunkers.core.util.cuboid;
 
 import lombok.Data;
 import org.bukkit.Bukkit;

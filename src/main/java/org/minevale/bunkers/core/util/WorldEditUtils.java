@@ -12,7 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.bunker.BunkerHandler;
-import org.minevale.bunkers.core.bunker.cuboid.Cuboid;
+import org.minevale.bunkers.core.util.cuboid.Cuboid;
 
 import java.io.File;
 

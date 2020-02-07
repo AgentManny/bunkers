@@ -1,21 +1,22 @@
 package org.minevale.bunkers.core.bunker;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.bson.Document;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.minevale.bunkers.core.BunkersCore;
-import org.minevale.bunkers.core.bunker.cuboid.Cuboid;
+import org.minevale.bunkers.core.util.cuboid.Cuboid;
 import org.minevale.bunkers.core.player.inventory.PlayerInventoryData;
 import org.minevale.bunkers.core.util.AngleUtil;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Getter
+@NoArgsConstructor
 public class PlayerBunker {
 
     private Cuboid bounds;
@@ -23,10 +24,6 @@ public class PlayerBunker {
 
     // stored as (uuid -> player inventory)
     private Map<String, PlayerInventoryData> playerInventories = new HashMap<>(); // Stores in a map
-
-    public PlayerBunker() { // gson
-
-    }
 
     public PlayerBunker(Cuboid bounds) {
         this.bounds = bounds;
