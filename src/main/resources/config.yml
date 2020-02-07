@@ -7,6 +7,12 @@ mongo:
 trade:
   distance: 10
   expire-time: 30 # seconds
+bunker:
+  copies: 1 # DO NOT CHANGE THIS WILL OVERRIDE OTHER PLAYER BUNKERS
+  schematic: "example"
+  world:
+    name: bunkers
+    environment: NORMAL #[NORMAL, NETHER, THE_END] -- Alters the sky
 currency:
   items:
     nugget:

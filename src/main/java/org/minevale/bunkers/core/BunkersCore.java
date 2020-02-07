@@ -9,12 +9,14 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.minevale.bunkers.core.api.BunkersApi;
 import org.minevale.bunkers.core.api.BunkersCoreApi;
+import org.minevale.bunkers.core.bunker.BunkerHandler;
 import org.minevale.bunkers.core.command.DebugCommand;
 import org.minevale.bunkers.core.command.TradeCommand;
 import org.minevale.bunkers.core.command.chat.ChatCommand;
@@ -24,6 +26,7 @@ import org.minevale.bunkers.core.player.PlayerDataManager;
 import org.minevale.bunkers.core.player.balance.Balance;
 import org.minevale.bunkers.core.trade.TradeManager;
 import org.minevale.bunkers.core.util.serializer.ItemStackAdapter;
+import org.minevale.bunkers.core.util.serializer.LocationAdapter;
 import org.minevale.bunkers.core.util.serializer.PotionEffectAdapter;
 
 import java.util.Arrays;
@@ -34,6 +37,7 @@ public class BunkersCore extends JavaPlugin {
     public static final Gson GSON = new GsonBuilder()
             .registerTypeHierarchyAdapter(PotionEffect.class, new PotionEffectAdapter())
             .registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter())
+            .registerTypeHierarchyAdapter(Location.class, new LocationAdapter())
             .setPrettyPrinting()
             .serializeNulls()
             .create();
@@ -45,6 +49,7 @@ public class BunkersCore extends JavaPlugin {
 
     private MongoDatabase mongoDatabase;
 
+    private BunkerHandler bunkerHandler;
     private PlayerDataManager playerDataManager;
     private TradeManager tradeManager;
 
@@ -74,7 +79,7 @@ public class BunkersCore extends JavaPlugin {
     private void registerManagers() {
         Balance.init(getConfig()); // Load currency items from config
 
-
+        this.bunkerHandler = new BunkerHandler(this);
         this.playerDataManager = new PlayerDataManager(this);
         this.tradeManager = new TradeManager(this);
 
