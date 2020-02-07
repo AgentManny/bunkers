@@ -7,10 +7,9 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.minevale.bunkers.core.BunkersCore;
+import org.minevale.bunkers.core.player.PlayerData;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 @Getter
 public class BunkerHandler {
@@ -23,8 +22,6 @@ public class BunkerHandler {
     private final World world;
 
     private final BunkerGrid grid;
-
-    private Map<Integer, PlayerBunker> createdBunkers = new HashMap<>(); // Amount of bunkers created -- todo maybe change just store copies created in YAML (or to support multi server in future MONGO)
 
     public BunkerHandler(BunkersCore plugin) {
         this.plugin = plugin;
@@ -52,6 +49,14 @@ public class BunkerHandler {
             // plugin.getPluginLoader().disablePlugin(plugin); -- Commented out for debug
             return;
         }
+    }
+
+    public PlayerBunker createBunker(PlayerData playerData) {
+        grid.setCopies(grid.getCopies() + 1); // Allow to figuring out where the next bunker will be located
+        plugin.getConfig().set("bunker.copies", grid.getCopies());
+
+        PlayerBunker playerBunker = new PlayerBunker();
+        return playerBunker;
     }
 
 
