@@ -6,7 +6,7 @@ import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.api.exception.InventoryFullException;
 import org.minevale.bunkers.core.command.CommandArgument;
 import org.minevale.bunkers.core.player.PlayerData;
-import org.minevale.bunkers.core.player.balance.Balance;
+import org.minevale.bunkers.core.player.currencies.CurrencyType;
 
 public class EconomyAddArgument implements CommandArgument {
 
@@ -23,7 +23,7 @@ public class EconomyAddArgument implements CommandArgument {
             return;
         }
 
-        Balance currency = Balance.parse(args[2]);
+        CurrencyType currency = CurrencyType.parse(args[2]);
         if (currency == null) {
             sender.sendMessage(ChatColor.RED + "Currency " + args[2] + " not found.");
             return;

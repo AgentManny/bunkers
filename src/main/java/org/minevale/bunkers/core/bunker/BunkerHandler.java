@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.player.PlayerData;
+import org.minevale.bunkers.core.player.bunker.PlayerBunker;
 import org.minevale.bunkers.core.util.WorldEditUtils;
 import org.minevale.bunkers.core.util.cuboid.Cuboid;
 

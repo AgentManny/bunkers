@@ -23,7 +23,7 @@ import org.minevale.bunkers.core.command.chat.ChatCommand;
 import org.minevale.bunkers.core.command.economy.EconomyCommand;
 import org.minevale.bunkers.core.listener.PlayerSyncListener;
 import org.minevale.bunkers.core.player.PlayerDataManager;
-import org.minevale.bunkers.core.player.balance.Balance;
+import org.minevale.bunkers.core.player.currencies.CurrencyType;
 import org.minevale.bunkers.core.trade.TradeManager;
 import org.minevale.bunkers.core.util.serializer.ItemStackAdapter;
 import org.minevale.bunkers.core.util.serializer.LocationAdapter;
@@ -77,7 +77,7 @@ public class BunkersCore extends JavaPlugin {
     }
 
     private void registerManagers() {
-        Balance.init(getConfig()); // Load currency items from config
+        CurrencyType.init(getConfig()); // Load currency items from config
 
         this.bunkerHandler = new BunkerHandler(this);
         this.playerDataManager = new PlayerDataManager(this);

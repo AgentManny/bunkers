@@ -7,8 +7,8 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
-import org.minevale.bunkers.core.bunker.PlayerBunker;
-import org.minevale.bunkers.core.player.balance.Balance;
+import org.minevale.bunkers.core.player.bunker.PlayerBunker;
+import org.minevale.bunkers.core.player.currencies.CurrencyType;
 import org.minevale.bunkers.core.player.inventory.PlayerInventoryData;
 
 import java.util.HashMap;
@@ -27,7 +27,7 @@ public class PlayerData {
     private PlayerBunker playerBunker;
     private PlayerInventoryData inventoryData; // todo remove after bunker is done or maybe use for lobby?
 
-    private Map<Balance, Integer> balanceMap = new HashMap<>();
+    private Map<CurrencyType, Integer> balanceMap = new HashMap<>();
     private long lastBalanceCheck = -1; // This could be a simple solution for continuously updating balance
 
     private boolean syncing = true; // Do not allow anyone to do anything before they're synced
@@ -45,7 +45,7 @@ public class PlayerData {
         }
 
         Document balanceData = document.get("balance", Document.class);
-        for (Balance balance : Balance.values()) {
+        for (CurrencyType balance : CurrencyType.values()) {
             balanceMap.put(balance, balanceData.getInteger(balance.getId(), 0));
         }
 
@@ -64,7 +64,7 @@ public class PlayerData {
                 .append("username", username);
 
         Document balanceData = new Document();
-        for (Balance balance : Balance.values()) {
+        for (CurrencyType balance : CurrencyType.values()) {
             balanceData.put(balance.getId(), balanceMap.getOrDefault(balance, 0));
         }
         document.append("balance", balanceData);
@@ -87,7 +87,7 @@ public class PlayerData {
             inventoryData.update(player);
         }
 
-        for (Balance balance : Balance.values()) {
+        for (CurrencyType balance : CurrencyType.values()) {
             balanceMap.put(balance, balance.getAmountFromInventory(inventoryData));
         }
     }
@@ -99,7 +99,7 @@ public class PlayerData {
         return amount.get();
     }
 
-    public int getBalance(Balance balance) {
+    public int getBalance(CurrencyType balance) {
         recalculateBalance();
         return balanceMap.getOrDefault(balance, 0);
     }

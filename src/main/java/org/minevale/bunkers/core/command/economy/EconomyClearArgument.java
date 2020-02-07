@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.command.CommandArgument;
 import org.minevale.bunkers.core.player.PlayerData;
-import org.minevale.bunkers.core.player.balance.Balance;
+import org.minevale.bunkers.core.player.currencies.CurrencyType;
 
 public class EconomyClearArgument implements CommandArgument {
 
@@ -22,7 +22,7 @@ public class EconomyClearArgument implements CommandArgument {
             return;
         }
 
-        Balance currency = args.length < 3 ? null : Balance.parse(args[2]);
+        CurrencyType currency = args.length < 3 ? null : CurrencyType.parse(args[2]);
 
         int removedAmount;
         if (currency == null) {

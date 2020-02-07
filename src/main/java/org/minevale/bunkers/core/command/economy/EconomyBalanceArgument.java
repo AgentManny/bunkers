@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.command.CommandArgument;
 import org.minevale.bunkers.core.player.PlayerData;
-import org.minevale.bunkers.core.player.balance.Balance;
+import org.minevale.bunkers.core.player.currencies.CurrencyType;
 
 public class EconomyBalanceArgument implements CommandArgument {
 
@@ -23,7 +23,7 @@ public class EconomyBalanceArgument implements CommandArgument {
         }
 
         int totalBalance = 0;
-        for (Balance balance : Balance.values()) {
+        for (CurrencyType balance : CurrencyType.values()) {
             sender.sendMessage(ChatColor.GREEN + balance.getFriendlyName() + ": " + ChatColor.WHITE + playerData.getBalance(balance));
         }
         sender.sendMessage(ChatColor.GREEN + "- - Total balance: " + playerData.getBalance() + " - -");

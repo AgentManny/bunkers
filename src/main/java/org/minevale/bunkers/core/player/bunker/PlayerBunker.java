@@ -1,4 +1,4 @@
-package org.minevale.bunkers.core.bunker;
+package org.minevale.bunkers.core.player.bunker;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

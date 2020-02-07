@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.player.PlayerData;
-import org.minevale.bunkers.core.player.balance.Balance;
+import org.minevale.bunkers.core.player.currencies.CurrencyType;
 
 public class DebugCommand implements CommandExecutor {
 
@@ -26,7 +26,7 @@ public class DebugCommand implements CommandExecutor {
 
         if (args[0].equalsIgnoreCase("balance")) {
             sender.sendMessage(ChatColor.GREEN.toString() + "Your balance: " + playerData.getBalance());
-            for (Balance balance : Balance.values()) {
+            for (CurrencyType balance : CurrencyType.values()) {
                 sender.sendMessage(ChatColor.YELLOW + balance.getFriendlyName() + " : " + ChatColor.WHITE + playerData.getBalance(balance));
             }
         } else {

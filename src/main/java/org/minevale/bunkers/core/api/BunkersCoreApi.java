@@ -7,7 +7,7 @@ import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.api.exception.InsufficientFundsException;
 import org.minevale.bunkers.core.api.exception.InventoryFullException;
 import org.minevale.bunkers.core.player.PlayerData;
-import org.minevale.bunkers.core.player.balance.Balance;
+import org.minevale.bunkers.core.player.currencies.CurrencyType;
 import org.minevale.bunkers.core.util.InventoryUtils;
 
 @RequiredArgsConstructor
@@ -34,7 +34,7 @@ public class BunkersCoreApi implements BunkersApi {
     public int clearBalance(PlayerData player) {
         int balanceBefore = player.getBalance();
 
-        for (Balance balance : Balance.values()) {
+        for (CurrencyType balance : CurrencyType.values()) {
             while (player.getInventoryData().contains(balance.getType())) {
                 player.getInventoryData().remove(balance.getType());
             }
@@ -48,7 +48,7 @@ public class BunkersCoreApi implements BunkersApi {
     }
 
     @Override
-    public int clearBalance(PlayerData player, Balance balance) {
+    public int clearBalance(PlayerData player, CurrencyType balance) {
         int balanceBefore = player.getBalance(balance);
 
         while (player.getInventoryData().contains(balance.getType())) {
@@ -63,7 +63,7 @@ public class BunkersCoreApi implements BunkersApi {
     }
 
     @Override
-    public int addCurrency(PlayerData player, Balance balance, int amount) throws InventoryFullException {
+    public int addCurrency(PlayerData player, CurrencyType balance, int amount) throws InventoryFullException {
         ItemStack item = balance.getItem().clone();
         item.setAmount(amount);
         if (InventoryUtils.fits(item, player.getInventoryData())) {
@@ -75,7 +75,7 @@ public class BunkersCoreApi implements BunkersApi {
     }
 
     @Override
-    public int removeCurrency(PlayerData player, Balance balance, int amount) throws InsufficientFundsException {
+    public int removeCurrency(PlayerData player, CurrencyType balance, int amount) throws InsufficientFundsException {
         int contains = player.getBalance(balance);
         if (contains < amount) {
             throw new InsufficientFundsException(player, balance, amount);
@@ -87,42 +87,42 @@ public class BunkersCoreApi implements BunkersApi {
 
     @Override
     public double getCoins(PlayerData player) {
-        return player.getBalance(Balance.COINS);
+        return player.getBalance(CurrencyType.COINS);
     }
 
     @Override
     public double addCoins(PlayerData player, int amount) {
-        player.getInventoryData().addItem(new ItemStack(Balance.COINS.getType(), amount));
-        return player.getBalance(Balance.COINS);
+        player.getInventoryData().addItem(new ItemStack(CurrencyType.COINS.getType(), amount));
+        return player.getBalance(CurrencyType.COINS);
     }
 
     @Override
     public double removeCoins(PlayerData player, int amount) {
-        player.getInventoryData().removeAmount(Balance.COINS.getType(), amount);
-        return player.getBalance(Balance.COINS);
+        player.getInventoryData().removeAmount(CurrencyType.COINS.getType(), amount);
+        return player.getBalance(CurrencyType.COINS);
     }
 
     @Override
     public double addNuggets(PlayerData player, int amount) {
-        player.getInventoryData().addItem(new ItemStack(Balance.NUGGETS.getType(), amount));
-        return player.getBalance(Balance.NUGGETS);
+        player.getInventoryData().addItem(new ItemStack(CurrencyType.NUGGETS.getType(), amount));
+        return player.getBalance(CurrencyType.NUGGETS);
     }
 
     @Override
     public double removeNuggets(PlayerData player, int amount) {
-        player.getInventoryData().removeAmount(Balance.NUGGETS.getType(), amount);
-        return player.getBalance(Balance.NUGGETS);
+        player.getInventoryData().removeAmount(CurrencyType.NUGGETS.getType(), amount);
+        return player.getBalance(CurrencyType.NUGGETS);
     }
 
     @Override
     public double addBars(PlayerData player, int amount) {
-        player.getInventoryData().addItem(new ItemStack(Balance.BARS.getType(), amount));
-        return player.getBalance(Balance.BARS);
+        player.getInventoryData().addItem(new ItemStack(CurrencyType.BARS.getType(), amount));
+        return player.getBalance(CurrencyType.BARS);
     }
 
     @Override
     public double removeBars(PlayerData player, int amount) {
-        player.getInventoryData().removeAmount(Balance.BARS.getType(), amount);
-        return player.getBalance(Balance.BARS);
+        player.getInventoryData().removeAmount(CurrencyType.BARS.getType(), amount);
+        return player.getBalance(CurrencyType.BARS);
     }
 }

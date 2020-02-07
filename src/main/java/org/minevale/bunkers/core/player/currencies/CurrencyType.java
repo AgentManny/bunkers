@@ -1,4 +1,4 @@
-package org.minevale.bunkers.core.player.balance;
+package org.minevale.bunkers.core.player.currencies;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Getter
 @AllArgsConstructor
-public enum Balance {
+public enum CurrencyType {
 
     COINS("coins", Material.DOUBLE_PLANT, null),
     NUGGETS("nuggets", Material.GOLD_NUGGET, null),
@@ -31,7 +31,7 @@ public enum Balance {
     public static void init(FileConfiguration config) {
         Set<String> section = config.getConfigurationSection("currency.items").getKeys(false);
         for (String source : section) {
-            Balance balance = parse(source);
+            CurrencyType balance = parse(source);
             if (balance == null) {
                 System.out.println("Failed to load " + source + " item as the currency assigned for it doesn't exist");
                 continue;
@@ -68,8 +68,8 @@ public enum Balance {
         return WordUtils.capitalizeFully(id);
     }
 
-    public static Balance parse(String source) {
-        for (Balance balance : Balance.values()) {
+    public static CurrencyType parse(String source) {
+        for (CurrencyType balance : CurrencyType.values()) {
             if (balance.getId().equalsIgnoreCase(source) || balance.name().equalsIgnoreCase(source)) {
                 return balance;
             }
