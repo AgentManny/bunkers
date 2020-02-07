@@ -40,7 +40,7 @@ public class EconomyCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "You don't have permission to use /" + label + " " + arg.usage() + "!");
                 return true;
             }
-
+            
             // Run asynchronous to prevent main thread from ever freezing up looking up offline players
             BunkersCore.getInstance().getServer().getScheduler().runTaskAsynchronously(BunkersCore.getInstance(), () -> arg.execute(sender, args));
         } else {
