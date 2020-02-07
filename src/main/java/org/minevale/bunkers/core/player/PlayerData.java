@@ -44,8 +44,6 @@ public class PlayerData {
             return;
         }
 
-        this.playerBunker = BunkersCore.getInstance().getBunkerHandler().createBunker(this); // Create random for now
-
         Document balanceData = document.get("balance", Document.class);
         for (CurrencyType balance : CurrencyType.values()) {
             balanceMap.put(balance, balanceData.getInteger(balance.getId(), 0));

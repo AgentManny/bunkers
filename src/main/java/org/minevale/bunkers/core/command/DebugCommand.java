@@ -29,6 +29,9 @@ public class DebugCommand implements CommandExecutor {
             for (CurrencyType balance : CurrencyType.values()) {
                 sender.sendMessage(ChatColor.YELLOW + balance.getFriendlyName() + " : " + ChatColor.WHITE + playerData.getBalance(balance));
             }
+        } else if (args[0].equalsIgnoreCase("create")) {
+            playerData.setPlayerBunker(BunkersCore.getInstance().getBunkerHandler().createBunker(playerData)); // Create random for now
+
         } else {
             sender.sendMessage(ChatColor.RED + "Command argument /" + label + " " + args[0] + " not found.");
         }
