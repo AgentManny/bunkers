@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
+import org.minevale.bunkers.core.bunker.PlayerBunker;
 import org.minevale.bunkers.core.player.balance.Balance;
 import org.minevale.bunkers.core.player.inventory.PlayerInventoryData;
 
@@ -23,7 +24,8 @@ public class PlayerData {
     private final UUID uuid;
     private final String username;
 
-    private PlayerInventoryData inventoryData;
+    private PlayerBunker playerBunker;
+    private PlayerInventoryData inventoryData; // todo remove after bunker is done or maybe use for lobby?
 
     private Map<Balance, Integer> balanceMap = new HashMap<>();
     private long lastBalanceCheck = -1; // This could be a simple solution for continuously updating balance

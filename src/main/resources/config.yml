@@ -8,6 +8,7 @@ trade:
   distance: 10
   expire-time: 30 # seconds
 bunker:
+  grid-spacing: 150
   copies: 1 # DO NOT CHANGE THIS WILL OVERRIDE OTHER PLAYER BUNKERS
   schematic: "example"
   world:

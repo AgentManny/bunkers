@@ -1,13 +1,16 @@
 package org.minevale.bunkers.core.bunker;
 
+import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import lombok.Getter;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.player.PlayerData;
+import org.minevale.bunkers.core.util.WorldEditUtils;
+import org.minevale.bunkers.core.util.cuboid.Cuboid;
 
 import java.io.File;
 
@@ -15,17 +18,22 @@ import java.io.File;
 public class BunkerHandler {
 
     public static final File SCHEMATICS_FOLDER = new File(JavaPlugin.getPlugin(WorldEditPlugin.class).getDataFolder(), "schematics");
+    public static final Vector STARTING_POINT = new Vector(1_000, 80, 1_000);
+
+    public final int gridSpacing;
 
     private final BunkersCore plugin;
 
     private final File schematic;
     private final World world;
 
-    private final BunkerGrid grid;
+    private int copies; // How many bunkers created instead of storing each bunker in a weak map
 
     public BunkerHandler(BunkersCore plugin) {
         this.plugin = plugin;
-        this.grid = new BunkerGrid();
+
+        this.copies = plugin.getConfig().getInt("bunker.copes", 1);
+        this.gridSpacing = plugin.getConfig().getInt("bunker.grid-spacing", 150);
 
         String worldName = plugin.getConfig().getString("bunker.world.name", "bunkers");
         World world;
@@ -52,12 +60,31 @@ public class BunkerHandler {
     }
 
     public PlayerBunker createBunker(PlayerData playerData) {
-        grid.setCopies(grid.getCopies() + 1); // Allow to figuring out where the next bunker will be located
-        plugin.getConfig().set("bunker.copies", grid.getCopies());
+        plugin.getConfig().set("bunker.copies", copies += 1);
 
-        PlayerBunker playerBunker = new PlayerBunker();
-        return playerBunker;
+        int xStart = STARTING_POINT.getBlockX() + gridSpacing; // todo introduce a proper grid it'll continue incrementing Z loc
+        int zStart = STARTING_POINT.getBlockZ() + (gridSpacing * copies);
+
+        Vector pasteAt = new Vector(xStart, STARTING_POINT.getY(), zStart);
+
+        CuboidClipboard clipboard;
+        try {
+            clipboard = WorldEditUtils.paste(pasteAt);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+
+        Location lowerCorner = WorldEditUtils.vectorToLocation(pasteAt);
+        Location upperCorner = WorldEditUtils.vectorToLocation(pasteAt.add(clipboard.getSize()));
+
+        PlayerBunker bunker = new PlayerBunker(new Cuboid(lowerCorner, upperCorner));
+        Player bukkitPlayer = playerData.getPlayer();
+        if (bukkitPlayer != null) {
+            bukkitPlayer.sendMessage(ChatColor.GREEN + "Bunker created. Teleporting...");
+            bukkitPlayer.teleport(bunker.getSpawnLocation());
+        }
+
+        return bunker;
     }
-
 
 }

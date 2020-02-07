@@ -34,30 +34,25 @@ public final class WorldEditUtils {
         editSession = esFactory.getEditSession(worldEditWorld, Integer.MAX_VALUE);
     }
 
-    public static CuboidClipboard paste(ArenaSchematic schematic, Vector pasteAt) throws Exception {
+    public static CuboidClipboard paste(Vector pasteAt) throws Exception {
         primeWorldEditApi();
 
-        CuboidClipboard clipboard = SchematicFormat.MCEDIT.load(schematic.getSchematicFile());
-
-        // systems like the ArenaGrid assume that pastes will 'begin' directly at the Vector
-        // provided. to ensure we can do this, we manually clear any offset (distance from
-        // corner of schematic to player) to ensure our pastes aren't dependant on the
-        // location of the player when copied
+        CuboidClipboard clipboard = SchematicFormat.MCEDIT.load(BunkersCore.getInstance().getBunkerHandler().getSchematic());
         clipboard.setOffset(new Vector(0, 0, 0));
         clipboard.paste(editSession, pasteAt, true);
 
         return clipboard;
     }
 
-    public static void save(ArenaSchematic schematic, Vector saveFrom) throws Exception {
+    public static void save(Vector saveFrom) throws Exception {
         primeWorldEditApi();
 
-        Vector schematicSize = readSchematicSize(schematic);
+        Vector schematicSize = readSchematicSize();
 
         CuboidClipboard newSchematic = new CuboidClipboard(schematicSize, saveFrom);
         newSchematic.copy(editSession);
 
-        SchematicFormat.MCEDIT.save(newSchematic, schematic.getSchematicFile());
+        SchematicFormat.MCEDIT.save(newSchematic, BunkersCore.getInstance().getBunkerHandler().getSchematic());
     }
 
     public static void clear(Cuboid bounds) {
@@ -82,8 +77,8 @@ public final class WorldEditUtils {
         }
     }
 
-    public static Vector readSchematicSize(ArenaSchematic schematic) throws Exception {
-        File schematicFile = schematic.getSchematicFile();
+    public static Vector readSchematicSize() throws Exception {
+        File schematicFile = BunkersCore.getInstance().getBunkerHandler().getSchematic();
         CuboidClipboard clipboard = SchematicFormat.MCEDIT.load(schematicFile);
 
         return clipboard.getSize();
