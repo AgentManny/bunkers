@@ -12,7 +12,7 @@ public enum PlayerTradeState {
 
     UNREADY(DyeColor.RED),
     READY(DyeColor.YELLOW),
-    CONFIRM(DyeColor.GREEN);
+    CONFIRM(DyeColor.LIME);
 
     private DyeColor color;
 
@@ -30,7 +30,7 @@ public enum PlayerTradeState {
                 break;
             }
 
-            case GREEN: {
+            case LIME: {
                 builder.name(ChatColor.GREEN + "Trade confirmed");
                 break;
             }

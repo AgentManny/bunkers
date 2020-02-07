@@ -1,6 +1,5 @@
 package org.minevale.bunkers.core.command;
 
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

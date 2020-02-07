@@ -80,7 +80,16 @@ public class PlayerDataManager {
         return this.playerMap.get(uuid);
     }
 
+    public PlayerData getPlayerData(String playerName) {
+        Player player = plugin.getServer().getPlayer(playerName);
+        if (player != null) {
+            return getPlayerData(player.getUniqueId());
+        }
 
-
-
+        Document document = mongoCollection.find(Filters.eq("username", playerName)).first();
+        if (document != null) {
+            return new PlayerData(UUID.fromString(document.getString("uuid")), document.getString("username"));
+        }
+        return null;
+    }
 }

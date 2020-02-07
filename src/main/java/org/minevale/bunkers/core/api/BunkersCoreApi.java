@@ -15,111 +15,114 @@ public class BunkersCoreApi implements BunkersApi {
 
     private final BunkersCore bunkersCore;
 
-    private PlayerData getPlayerData(Player player) {
-        return bunkersCore.getPlayerDataManager().getPlayerData(player); // Method used to accessing it faster
+    @Override
+    public PlayerData getPlayerData(String playerName) {
+        return bunkersCore.getPlayerDataManager().getPlayerData(playerName);
     }
 
     @Override
-    public int getBalance(Player player) {
-        PlayerData playerData = getPlayerData(player);
-        return playerData.getBalance();
+    public PlayerData getPlayerData(Player player) {
+        return bunkersCore.getPlayerDataManager().getPlayerData(player);
     }
 
     @Override
-    public int clearBalance(Player player) {
-        PlayerData playerData = getPlayerData(player);
-        int balanceBefore = playerData.getBalance();
+    public int getBalance(PlayerData player) {
+        return player.getBalance();
+    }
+
+    @Override
+    public int clearBalance(PlayerData player) {
+        int balanceBefore = player.getBalance();
 
         for (Balance balance : Balance.values()) {
-            while (player.getInventory().contains(balance.getType())) {
-                player.getInventory().remove(balance.getType());
+            while (player.getInventoryData().contains(balance.getType())) {
+                player.getInventoryData().remove(balance.getType());
             }
         }
-        player.updateInventory();
+
+        Player bukkitPlayer = player.getPlayer();
+        if (bukkitPlayer != null) {
+            bukkitPlayer.updateInventory();
+        }
         return balanceBefore;
     }
 
     @Override
-    public int clearBalance(Player player, Balance balance) {
-        PlayerData playerData = getPlayerData(player);
-        int balanceBefore = playerData.getBalance(balance);
+    public int clearBalance(PlayerData player, Balance balance) {
+        int balanceBefore = player.getBalance(balance);
 
-        while (player.getInventory().contains(balance.getType())) {
-            player.getInventory().remove(balance.getType());
+        while (player.getInventoryData().contains(balance.getType())) {
+            player.getInventoryData().remove(balance.getType());
         }
 
-        player.updateInventory();
+        Player bukkitPlayer = player.getPlayer();
+        if (bukkitPlayer != null) {
+            bukkitPlayer.updateInventory();
+        }
         return balanceBefore;
     }
 
     @Override
-    public int addCurrency(Player player, Balance balance, int amount) throws InventoryFullException {
+    public int addCurrency(PlayerData player, Balance balance, int amount) throws InventoryFullException {
         ItemStack item = balance.getItem().clone();
         item.setAmount(amount);
-        if (InventoryUtils.fits(item, player.getInventory())) {
-            player.getInventory().addItem(item);
+        if (InventoryUtils.fits(item, player.getInventoryData())) {
+            player.getInventoryData().addItem(item);
+            player.getInventoryData().update(player);
             return amount;
         }
-        throw new InventoryFullException(player, player.getInventory(), item);
+        throw new InventoryFullException(player, item);
     }
 
     @Override
-    public int removeCurrency(Player player, Balance balance, int amount) throws InsufficientFundsException {
-        PlayerData playerData = getPlayerData(player);
-        int contains = playerData.getBalance(balance);
+    public int removeCurrency(PlayerData player, Balance balance, int amount) throws InsufficientFundsException {
+        int contains = player.getBalance(balance);
         if (contains < amount) {
             throw new InsufficientFundsException(player, balance, amount);
         }
 
-        player.getInventory().removeAmount(balance.getType(), amount);
+        player.getInventoryData().removeAmount(balance.getType(), amount);
         return amount;
     }
 
     @Override
-    public double getCoins(Player player) {
-        PlayerData playerData = getPlayerData(player);
-        return playerData.getBalance(Balance.COINS);
+    public double getCoins(PlayerData player) {
+        return player.getBalance(Balance.COINS);
     }
 
     @Override
-    public double addCoins(Player player, int amount) {
-        PlayerData playerData = getPlayerData(player);
-        player.getInventory().addItem(new ItemStack(Balance.COINS.getType(), amount));
-        return playerData.getBalance(Balance.COINS);
+    public double addCoins(PlayerData player, int amount) {
+        player.getInventoryData().addItem(new ItemStack(Balance.COINS.getType(), amount));
+        return player.getBalance(Balance.COINS);
     }
 
     @Override
-    public double removeCoins(Player player, int amount) {
-        PlayerData playerData = getPlayerData(player);
-        player.getInventory().removeAmount(Balance.COINS.getType(), amount);
-        return playerData.getBalance(Balance.COINS);
+    public double removeCoins(PlayerData player, int amount) {
+        player.getInventoryData().removeAmount(Balance.COINS.getType(), amount);
+        return player.getBalance(Balance.COINS);
     }
 
     @Override
-    public double addNuggets(Player player, int amount) {
-        PlayerData playerData = getPlayerData(player);
-        player.getInventory().addItem(new ItemStack(Balance.NUGGETS.getType(), amount));
-        return playerData.getBalance(Balance.NUGGETS);
+    public double addNuggets(PlayerData player, int amount) {
+        player.getInventoryData().addItem(new ItemStack(Balance.NUGGETS.getType(), amount));
+        return player.getBalance(Balance.NUGGETS);
     }
 
     @Override
-    public double removeNuggets(Player player, int amount) {
-        PlayerData playerData = getPlayerData(player);
-        player.getInventory().removeAmount(Balance.NUGGETS.getType(), amount);
-        return playerData.getBalance(Balance.NUGGETS);
+    public double removeNuggets(PlayerData player, int amount) {
+        player.getInventoryData().removeAmount(Balance.NUGGETS.getType(), amount);
+        return player.getBalance(Balance.NUGGETS);
     }
 
     @Override
-    public double addBars(Player player, int amount) {
-        PlayerData playerData = getPlayerData(player);
-        player.getInventory().addItem(new ItemStack(Balance.BARS.getType(), amount));
-        return playerData.getBalance(Balance.BARS);
+    public double addBars(PlayerData player, int amount) {
+        player.getInventoryData().addItem(new ItemStack(Balance.BARS.getType(), amount));
+        return player.getBalance(Balance.BARS);
     }
 
     @Override
-    public double removeBars(Player player, int amount) {
-        PlayerData playerData = getPlayerData(player);
-        player.getInventory().removeAmount(Balance.BARS.getType(), amount);
-        return playerData.getBalance(Balance.BARS);
+    public double removeBars(PlayerData player, int amount) {
+        player.getInventoryData().removeAmount(Balance.BARS.getType(), amount);
+        return player.getBalance(Balance.BARS);
     }
 }

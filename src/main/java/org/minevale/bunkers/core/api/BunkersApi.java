@@ -3,9 +3,14 @@ package org.minevale.bunkers.core.api;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.api.exception.InsufficientFundsException;
 import org.minevale.bunkers.core.api.exception.InventoryFullException;
+import org.minevale.bunkers.core.player.PlayerData;
 import org.minevale.bunkers.core.player.balance.Balance;
 
 public interface BunkersApi {
+
+    PlayerData getPlayerData(String playerName);
+
+    PlayerData getPlayerData(Player player);
 
     /**
      * Balance calculation will translate all currencies back to coins
@@ -14,7 +19,7 @@ public interface BunkersApi {
      *
      * @return total sum of coins
      */
-    int getBalance(Player player);
+    int getBalance(PlayerData player);
 
     /**
      * Removes all coins, nuggets and bars from the players inventory.
@@ -23,7 +28,7 @@ public interface BunkersApi {
      *
      * @return total sum of coins removed
      */
-    int clearBalance(Player player);
+    int clearBalance(PlayerData player);
 
     /**
      * Removes all coins, nuggets and bars from the players inventory.
@@ -32,11 +37,11 @@ public interface BunkersApi {
      *
      * @return total sum of coins removed
      */
-    int clearBalance(Player player, Balance balance);
+    int clearBalance(PlayerData player, Balance balance);
 
-    int addCurrency(Player player, Balance balance, int amount) throws InventoryFullException;
+    int addCurrency(PlayerData player, Balance balance, int amount) throws InventoryFullException;
 
-    int removeCurrency(Player player, Balance balance, int amount) throws InsufficientFundsException;
+    int removeCurrency(PlayerData player, Balance balance, int amount) throws InsufficientFundsException;
 
     /**
      * Balance of the player including only coins.
@@ -44,19 +49,19 @@ public interface BunkersApi {
      * @param player Player balance to get
      * @return
      */
-    double getCoins(Player player);
+    double getCoins(PlayerData player);
 
-    double addCoins(Player player, int amount);
+    double addCoins(PlayerData player, int amount);
 
-    double removeCoins(Player player, int amount);
+    double removeCoins(PlayerData player, int amount);
 
-    double addNuggets(Player player, int amount);
+    double addNuggets(PlayerData player, int amount);
 
-    double removeNuggets(Player player, int amount);
+    double removeNuggets(PlayerData player, int amount);
 
-    double addBars(Player player, int amount);
+    double addBars(PlayerData player, int amount);
 
-    double removeBars(Player player, int amount);
+    double removeBars(PlayerData player, int amount);
 
     /*
     getCoins(Player p) - Returns specifically the number of coins the player holds, excludes nuggets and bars. Returns an integer

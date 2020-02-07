@@ -35,7 +35,7 @@ public class PlayerData {
         if (document == null) {
             Player player = getPlayer();
             if (player != null) {
-                this.inventoryData = new PlayerInventoryData(player);
+                this.inventoryData = new PlayerInventoryData(this);
                 recalculateBalance();
             }
             save(); // Saves to disk
@@ -69,7 +69,10 @@ public class PlayerData {
 
         Player player = getPlayer();
         if (player != null) {
-            document.append("inventory", PlayerInventoryData.getAsDocument(player));
+            if (inventoryData != null) {
+                inventoryData.apply(player); // Resynchronise
+                document.append("inventory", PlayerInventoryData.getAsDocument(inventoryData));
+            }
         }
         return document;
     }

@@ -1,9 +1,7 @@
 package org.minevale.bunkers.core.command.economy;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.api.exception.InsufficientFundsException;
 import org.minevale.bunkers.core.command.CommandArgument;
@@ -19,13 +17,12 @@ public class EconomyRemoveArgument implements CommandArgument {
             return;
         }
 
-        Player target = Bukkit.getPlayer(args[1]);
-        if (target == null) {
+        PlayerData playerData = BunkersCore.getInstance().getPlayerDataManager().getPlayerData(args[1]);
+        if (playerData == null) {
             sender.sendMessage(ChatColor.RED + "Player " + args[1] + " not found.");
             return;
         }
 
-        PlayerData playerData = BunkersCore.getInstance().getPlayerDataManager().getPlayerData(target);
         Balance currency = Balance.parse(args[2]);
         if (currency == null) {
             sender.sendMessage(ChatColor.RED + "Currency " + args[2] + " not found.");
@@ -42,13 +39,13 @@ public class EconomyRemoveArgument implements CommandArgument {
 
 
         try {
-            BunkersCore.getInstance().getApi().removeCurrency(target, currency, amount);
+            BunkersCore.getInstance().getApi().removeCurrency(playerData, currency, amount);
         } catch (InsufficientFundsException e) {
             sender.sendMessage(ChatColor.RED + e.getFriendlyMessage());
             return;
         }
 
-        sender.sendMessage(ChatColor.GREEN + "Removed " + amount + " of " + currency.getFriendlyName() + " from " + ChatColor.WHITE + target.getName() + ChatColor.GREEN + ".");
+        sender.sendMessage(ChatColor.GREEN + "Removed " + amount + " of " + currency.getFriendlyName() + " from " + ChatColor.WHITE + playerData.getUsername() + ChatColor.GREEN + ".");
 
     }
 

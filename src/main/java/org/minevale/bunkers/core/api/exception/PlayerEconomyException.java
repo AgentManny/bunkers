@@ -1,16 +1,16 @@
 package org.minevale.bunkers.core.api.exception;
 
 import lombok.Getter;
-import org.bukkit.entity.Player;
+import org.minevale.bunkers.core.player.PlayerData;
 
 @Getter
 public abstract class PlayerEconomyException extends Exception {
 
-    protected final Player player;
+    protected final PlayerData player;
     private final String message;
 
-    protected PlayerEconomyException(Player player, String message) {
-        super(player.getName() + "[" + player.getUniqueId().toString() + "]: " + message);
+    protected PlayerEconomyException(PlayerData player, String message) {
+        super(player.getUsername() + "[" + player.getUuid().toString() + "]: " + message);
         this.message = message;
         this.player = player;
     }
