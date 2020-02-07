@@ -3,8 +3,8 @@ package org.minevale.bunkers.core.player;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
-import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bson.Document;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
@@ -87,7 +87,7 @@ public class PlayerDataManager {
             return getPlayerData(player.getUniqueId());
         }
 
-        if (Thread.currentThread() != MinecraftServer.getServer().primaryThread) {
+        if (Bukkit.isPrimaryThread()) {
             plugin.getLogger().warning("Loading offline player on main thread. This isn't advised as it may cause main server to freeze up.");
         }
 
