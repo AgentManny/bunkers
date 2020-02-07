@@ -18,7 +18,7 @@ import java.io.File;
 public class BunkerHandler {
 
     public static final File SCHEMATICS_FOLDER = new File(JavaPlugin.getPlugin(WorldEditPlugin.class).getDataFolder(), "schematics");
-    public static final Vector STARTING_POINT = new Vector(1_000, 80, 1_000);
+    public static final Vector STARTING_POINT = new Vector(1000, 80, 1000);
 
     public final int gridSpacing;
 
@@ -69,7 +69,7 @@ public class BunkerHandler {
 
         CuboidClipboard clipboard;
         try {
-            clipboard = WorldEditUtils.paste(pasteAt);
+            clipboard = WorldEditUtils.paste(schematic, pasteAt);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

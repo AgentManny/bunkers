@@ -28,31 +28,30 @@ public final class WorldEditUtils {
         }
 
         EditSessionFactory esFactory = WorldEdit.getInstance().getEditSessionFactory();
-        BunkerHandler bunkerHandler = BunkersCore.getInstance().getBunkerHandler();
 
-        worldEditWorld = new BukkitWorld(bunkerHandler.getWorld());
+        worldEditWorld = new BukkitWorld(BunkersCore.getInstance().getBunkerHandler().getWorld());
         editSession = esFactory.getEditSession(worldEditWorld, Integer.MAX_VALUE);
     }
 
-    public static CuboidClipboard paste(Vector pasteAt) throws Exception {
+    public static CuboidClipboard paste(File fileSchematic, Vector pasteAt) throws Exception {
         primeWorldEditApi();
 
-        CuboidClipboard clipboard = SchematicFormat.MCEDIT.load(BunkersCore.getInstance().getBunkerHandler().getSchematic());
+        CuboidClipboard clipboard = SchematicFormat.MCEDIT.load(fileSchematic);
         clipboard.setOffset(new Vector(0, 0, 0));
         clipboard.paste(editSession, pasteAt, true);
 
         return clipboard;
     }
 
-    public static void save(Vector saveFrom) throws Exception {
+    public static void save(File schematicFile, Vector saveFrom) throws Exception {
         primeWorldEditApi();
 
-        Vector schematicSize = readSchematicSize();
+        Vector schematicSize = readSchematicSize(schematicFile);
 
         CuboidClipboard newSchematic = new CuboidClipboard(schematicSize, saveFrom);
         newSchematic.copy(editSession);
 
-        SchematicFormat.MCEDIT.save(newSchematic, BunkersCore.getInstance().getBunkerHandler().getSchematic());
+        SchematicFormat.MCEDIT.save(newSchematic, schematicFile);
     }
 
     public static void clear(Cuboid bounds) {
@@ -77,10 +76,8 @@ public final class WorldEditUtils {
         }
     }
 
-    public static Vector readSchematicSize() throws Exception {
-        File schematicFile = BunkersCore.getInstance().getBunkerHandler().getSchematic();
+    public static Vector readSchematicSize(File schematicFile) throws Exception {
         CuboidClipboard clipboard = SchematicFormat.MCEDIT.load(schematicFile);
-
         return clipboard.getSize();
     }
 
@@ -89,9 +86,9 @@ public final class WorldEditUtils {
 
         return new Location(
                 bunkerHandler.getWorld(),
-            vector.getBlockX(),
-            vector.getBlockY(),
-            vector.getBlockZ()
+                vector.getBlockX(),
+                vector.getBlockY(),
+                vector.getBlockZ()
         );
     }
 
