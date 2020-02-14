@@ -1,13 +1,18 @@
 package org.minevale.bunkers.core.command;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.minevale.bunkers.core.BunkersCore;
+import org.minevale.bunkers.core.chat.ChatManager;
 import org.minevale.bunkers.core.chat.ChatType;
 
+@RequiredArgsConstructor
 public class SetChatCommand implements CommandExecutor {
+
+    private final ChatManager chatManager;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -27,7 +32,7 @@ public class SetChatCommand implements CommandExecutor {
             return true;
         }
 
-        BunkersCore.getInstance().setChatMode(type);
+        chatManager.setChatMode(type);
         sender.sendMessage(ChatColor.GREEN + "Set global chat type to " + ChatColor.WHITE + type.name() + ChatColor.GREEN + ".");
         return true;
     }

@@ -1,5 +1,6 @@
 package org.minevale.bunkers.core.command;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -7,13 +8,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
+import org.minevale.bunkers.core.chat.ChatManager;
 import org.minevale.bunkers.core.chat.ChatType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 public class ChatCommand implements CommandExecutor {
+
+    private final ChatManager chatManager;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -103,8 +108,8 @@ public class ChatCommand implements CommandExecutor {
                 }
 
                 if (args[1].equalsIgnoreCase("global")) {
-                    boolean newValue = !BunkersCore.getInstance().isChatLock();
-                    BunkersCore.getInstance().setChatLock(newValue);
+                    boolean newValue = !chatManager.isChatLock();
+                    chatManager.setChatLock(newValue);
 
                     sender.sendMessage((newValue ? ChatColor.RED : ChatColor.GREEN) + "You have " + (newValue ? "locked" : "unlocked") + " global chat.");
                 } else {
@@ -116,21 +121,6 @@ public class ChatCommand implements CommandExecutor {
         } else {
             sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
         }
-
-
-        if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "Usage: /chat <lock|clear> [global|local]");
-            return true;
-        }
-
-        ChatType type = ChatType.parse(args[0]);
-        if (type == null) {
-            sender.sendMessage(ChatColor.RED + "Chat mode " + args[0] + " not found.");
-            return true;
-        }
-
-        BunkersCore.getInstance().setChatMode(type);
-        sender.sendMessage(ChatColor.GREEN + "Set global chat type to " + ChatColor.WHITE + type.name() + ChatColor.GREEN + ".");
         return true;
     }
 

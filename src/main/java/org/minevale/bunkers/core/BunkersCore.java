@@ -8,7 +8,6 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,11 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import org.minevale.bunkers.core.api.BunkersApi;
 import org.minevale.bunkers.core.api.BunkersCoreApi;
 import org.minevale.bunkers.core.bunker.BunkerHandler;
-import org.minevale.bunkers.core.chat.ChatListener;
-import org.minevale.bunkers.core.chat.ChatType;
-import org.minevale.bunkers.core.command.ChatCommand;
 import org.minevale.bunkers.core.command.DebugCommand;
-import org.minevale.bunkers.core.command.SetChatCommand;
 import org.minevale.bunkers.core.command.TradeCommand;
 import org.minevale.bunkers.core.command.economy.EconomyCommand;
 import org.minevale.bunkers.core.listener.PlayerSyncListener;
@@ -51,9 +46,6 @@ public class BunkersCore extends JavaPlugin {
 
     @Getter private BunkersApi api;
 
-    @Setter private boolean chatLock = false;
-    @Setter private ChatType chatMode = ChatType.LOCAL;
-
     private MongoDatabase mongoDatabase;
 
     private BunkerHandler bunkerHandler;
@@ -65,9 +57,6 @@ public class BunkersCore extends JavaPlugin {
 
         saveDefaultConfig();
         getConfig().options().copyDefaults(true);
-        this.chatMode = ChatType.parse(getConfig().getString("chat.mode", "local"));
-        this.chatLock = getConfig().getBoolean("chat.locked", false);
-
         loadDatabase();
 
         registerCommands();
@@ -99,14 +88,11 @@ public class BunkersCore extends JavaPlugin {
         getCommand("trade").setExecutor(new TradeCommand());
         getCommand("debug").setExecutor(new DebugCommand());
         getCommand("economy").setExecutor(new EconomyCommand());
-        getCommand("setchat").setExecutor(new SetChatCommand());
-        getCommand("chat").setExecutor(new ChatCommand());
     }
 
     private void registerListeners() {
         Arrays.asList(
-                new PlayerSyncListener(this),
-                new ChatListener()
+                new PlayerSyncListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

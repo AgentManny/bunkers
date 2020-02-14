@@ -1,26 +1,29 @@
 package org.minevale.bunkers.core.chat;
 
+import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.minevale.bunkers.core.BunkersCore;
 
 import java.util.ArrayList;
 
+@RequiredArgsConstructor
 public class ChatListener implements Listener {
+
+    private final ChatManager chatManager;
 
     @EventHandler
     public void onAsyncChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        if (BunkersCore.getInstance().isChatLock() && !player.hasPermission("minevale.chatlock.bypass")) {
+        if (chatManager.isChatLock() && !player.hasPermission("minevale.chatlock.bypass")) {
             player.sendMessage(ChatColor.RED + "Chat is currently locked.");
             event.setCancelled(true);
             return;
         }
 
-        if (BunkersCore.getInstance().getChatMode() != ChatType.LOCAL) return;
+        if (chatManager.getChatMode() != ChatType.LOCAL) return;
 
         //PlayerData playerData = BunkersCore.getInstance().getPlayerDataManager().getPlayerData(player);
         //if (playerData.getChatType() != ChatType.LOCAL) return; // Local message isn't required for any other chat modes
