@@ -4,6 +4,9 @@ mongo:
   authentication:
     username: ""
     password: ""
+chat:
+  mode: "local" # [local, global]
+  clear-radius: 25 # Distance to clear around a player with /chat clear local [radius]
 trade:
   distance: 10
   expire-time: 30 # seconds

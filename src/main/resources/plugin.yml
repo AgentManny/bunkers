@@ -20,3 +20,6 @@ commands:
   chat:
     usage: "/chat <lock|clear> <global|local>"
     description: "Chat management for bunkers core"
+  setchat:
+    usage: "/setchat <local|global>"
+    description: "Sets the chat mode globally"

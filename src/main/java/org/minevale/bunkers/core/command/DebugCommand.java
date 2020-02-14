@@ -17,6 +17,8 @@ public class DebugCommand implements CommandExecutor {
             return true;
         }
 
+        if (!sender.isOp()) return true;
+
         Player player = (Player) sender;
         PlayerData playerData = BunkersCore.getInstance().getPlayerDataManager().getPlayerData(player);
         if (args.length == 0) {

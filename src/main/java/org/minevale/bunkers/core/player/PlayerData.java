@@ -30,6 +30,8 @@ public class PlayerData {
     private Map<CurrencyType, Integer> balanceMap = new HashMap<>();
     private long lastBalanceCheck = -1; // This could be a simple solution for continuously updating balance
 
+ //   private ChatType chatType = ChatType.LOCAL;
+
     private boolean syncing = true; // Do not allow anyone to do anything before they're synced
     private boolean needsSaving = false;
 
@@ -50,12 +52,19 @@ public class PlayerData {
             balanceMap.put(balance, balanceData.getInteger(balance.getId(), 0));
         }
 
+//        if (document.containsKey("chat")) {
+//            chatType = ChatType.parse(document.getString("chat"));
+//        }
+
         if (document.containsKey("inventory")) {
             this.inventoryData = PlayerInventoryData.deserialize(document.get("inventory", Document.class).toJson()); // Should try to simplify
         }
 
         if (document.containsKey("bunker")) {
             this.playerBunker = PlayerBunker.deserialize(document.get("bunker", Document.class).toJson()); // Should try to simplify
+            if (this.playerBunker != null) {
+                this.playerBunker.setPlayerData(this);
+            }
         }
     }
 
@@ -67,6 +76,9 @@ public class PlayerData {
     public Document toDocument() {
         Document document = new Document("uuid", uuid.toString())
                 .append("username", username);
+
+        // Chat isn't per player
+        //document.append("chat", chatType.id());
 
         Document balanceData = new Document();
         for (CurrencyType balance : CurrencyType.values()) {
@@ -80,6 +92,7 @@ public class PlayerData {
         }
         document.append("inventory", PlayerInventoryData.getAsDocument(inventoryData));
         document.append("bunker", PlayerBunker.getAsDocument(playerBunker));
+
         return document;
     }
 

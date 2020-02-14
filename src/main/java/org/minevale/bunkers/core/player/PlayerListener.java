@@ -23,7 +23,10 @@ public class PlayerListener implements Listener {
             playerData.getInventoryData().apply(player);
         }
 
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> playerData.setSyncing(false), 10L);
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            playerData.setSyncing(false);
+            playerData.getPlayerBunker().join(player);
+        }, 10L);
     }
 
     @EventHandler

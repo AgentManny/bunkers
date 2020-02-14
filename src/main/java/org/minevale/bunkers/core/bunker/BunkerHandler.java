@@ -77,7 +77,7 @@ public class BunkerHandler {
         Location lowerCorner = WorldEditUtils.vectorToLocation(pasteAt);
         Location upperCorner = WorldEditUtils.vectorToLocation(pasteAt.add(clipboard.getSize()));
 
-        PlayerBunker bunker = new PlayerBunker(new Cuboid(lowerCorner, upperCorner));
+        PlayerBunker bunker = new PlayerBunker(playerData, new Cuboid(lowerCorner, upperCorner));
 
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             Player bukkitPlayer = playerData.getPlayer();

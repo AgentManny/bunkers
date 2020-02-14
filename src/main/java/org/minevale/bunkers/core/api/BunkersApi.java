@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.api.exception.InsufficientFundsException;
 import org.minevale.bunkers.core.api.exception.InventoryFullException;
 import org.minevale.bunkers.core.player.PlayerData;
+import org.minevale.bunkers.core.player.bunker.PlayerBunker;
 import org.minevale.bunkers.core.player.currencies.CurrencyType;
 
 public interface BunkersApi {
@@ -62,6 +63,8 @@ public interface BunkersApi {
     double addBars(PlayerData player, int amount);
 
     double removeBars(PlayerData player, int amount);
+
+    PlayerBunker getBunker(PlayerData playerData);
 
     /*
     getCoins(Player p) - Returns specifically the number of coins the player holds, excludes nuggets and bars. Returns an integer

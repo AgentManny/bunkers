@@ -7,6 +7,7 @@ import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.api.exception.InsufficientFundsException;
 import org.minevale.bunkers.core.api.exception.InventoryFullException;
 import org.minevale.bunkers.core.player.PlayerData;
+import org.minevale.bunkers.core.player.bunker.PlayerBunker;
 import org.minevale.bunkers.core.player.currencies.CurrencyType;
 import org.minevale.bunkers.core.util.InventoryUtils;
 
@@ -124,5 +125,10 @@ public class BunkersCoreApi implements BunkersApi {
     public double removeBars(PlayerData player, int amount) {
         player.getInventoryData().removeAmount(CurrencyType.BARS.getType(), amount);
         return player.getBalance(CurrencyType.BARS);
+    }
+
+    @Override
+    public PlayerBunker getBunker(PlayerData playerData) {
+        return playerData.getPlayerBunker();
     }
 }
