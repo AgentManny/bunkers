@@ -20,9 +20,10 @@ import org.minevale.bunkers.core.api.BunkersCoreApi;
 import org.minevale.bunkers.core.bunker.BunkerHandler;
 import org.minevale.bunkers.core.chat.ChatListener;
 import org.minevale.bunkers.core.chat.ChatType;
+import org.minevale.bunkers.core.command.ChatCommand;
 import org.minevale.bunkers.core.command.DebugCommand;
+import org.minevale.bunkers.core.command.SetChatCommand;
 import org.minevale.bunkers.core.command.TradeCommand;
-import org.minevale.bunkers.core.command.chat.ChatCommand;
 import org.minevale.bunkers.core.command.economy.EconomyCommand;
 import org.minevale.bunkers.core.listener.PlayerSyncListener;
 import org.minevale.bunkers.core.player.PlayerDataManager;
@@ -67,7 +68,6 @@ public class BunkersCore extends JavaPlugin {
         this.chatMode = ChatType.parse(getConfig().getString("chat.mode", "local"));
         this.chatLock = getConfig().getBoolean("chat.locked", false);
 
-
         loadDatabase();
 
         registerCommands();
@@ -99,6 +99,7 @@ public class BunkersCore extends JavaPlugin {
         getCommand("trade").setExecutor(new TradeCommand());
         getCommand("debug").setExecutor(new DebugCommand());
         getCommand("economy").setExecutor(new EconomyCommand());
+        getCommand("setchat").setExecutor(new SetChatCommand());
         getCommand("chat").setExecutor(new ChatCommand());
     }
 
