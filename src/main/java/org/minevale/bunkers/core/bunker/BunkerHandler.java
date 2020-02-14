@@ -33,7 +33,7 @@ public class BunkerHandler {
     public BunkerHandler(BunkersCore plugin) {
         this.plugin = plugin;
 
-        this.copies = plugin.getConfig().getInt("bunker.copes", 1);
+        this.copies = plugin.getConfig().getInt("bunker.copies", 1);
         this.gridSpacing = plugin.getConfig().getInt("bunker.grid-spacing", 150);
 
         String worldName = plugin.getConfig().getString("bunker.world.name", "bunkers");
