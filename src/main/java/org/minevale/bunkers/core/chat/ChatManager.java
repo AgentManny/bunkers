@@ -1,9 +1,15 @@
 package org.minevale.bunkers.core.chat;
 
 import lombok.Getter;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.command.ChatCommand;
 import org.minevale.bunkers.core.command.SetChatCommand;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Getter
 public class ChatManager {
@@ -13,11 +19,24 @@ public class ChatManager {
     private boolean chatLock;
     private ChatType chatMode;
 
+    private Map<Integer, ChatColor> localChatRadius = new LinkedHashMap<>();
+
     public ChatManager(BunkersCore plugin) {
         this.plugin = plugin;
 
-        this.chatMode = ChatType.parse(plugin.getConfig().getString("chat.mode", "local"));
-        this.chatLock = plugin.getConfig().getBoolean("chat.locked", false);
+        FileConfiguration config = plugin.getConfig();
+
+        this.chatMode = ChatType.parse(config.getString("chat.mode", "local"));
+        this.chatLock = config.getBoolean("chat.locked", false);
+
+        Set<String> chatRadius = config.getConfigurationSection("chat.local-distance").getKeys(false);
+        chatRadius.stream()
+                .map(Integer::parseInt)
+                .sorted(Integer::compareTo)
+                .forEach(value -> {
+                    ChatColor color = ChatColor.valueOf(config.getString("chat.local-distance." + value));
+                    localChatRadius.put(value, color);
+                });
 
         plugin.getCommand("setchat").setExecutor(new SetChatCommand(this));
         plugin.getCommand("chat").setExecutor(new ChatCommand(this));
