@@ -19,6 +19,7 @@ import org.minevale.bunkers.core.api.BunkersCoreApi;
 import org.minevale.bunkers.core.bunker.BunkerHandler;
 import org.minevale.bunkers.core.command.DebugCommand;
 import org.minevale.bunkers.core.command.TradeCommand;
+import org.minevale.bunkers.core.command.bunker.BunkerCommand;
 import org.minevale.bunkers.core.command.economy.EconomyCommand;
 import org.minevale.bunkers.core.listener.PlayerSyncListener;
 import org.minevale.bunkers.core.player.PlayerDataManager;
@@ -85,6 +86,7 @@ public class BunkersCore extends JavaPlugin {
     }
 
     private void registerCommands() {
+        getCommand("bunker").setExecutor(new BunkerCommand());
         getCommand("trade").setExecutor(new TradeCommand());
         getCommand("debug").setExecutor(new DebugCommand());
         getCommand("economy").setExecutor(new EconomyCommand());

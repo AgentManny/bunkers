@@ -17,6 +17,10 @@ commands:
     aliases: ["eco"]
     description: "Economy management for bunkers core"
     permission: "bunkers.core.admin"
+  bunker:
+    usage: "/bunker <create|join> [player]"
+    description: "Bunker management for bunkers core"
+    permission: "bunkers.core.admin"
   chat:
     usage: "/chat <lock|clear> <global|local>"
     description: "Chat management for bunkers core"
