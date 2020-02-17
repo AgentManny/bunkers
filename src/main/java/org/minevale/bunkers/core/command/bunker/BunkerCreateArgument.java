@@ -11,7 +11,7 @@ public class BunkerCreateArgument implements CommandArgument {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if (args.length == 1) {
+        if (args.length != 1) {
             sender.sendMessage(ChatColor.RED + "Usage: /bunker " + usage());
             return;
         }

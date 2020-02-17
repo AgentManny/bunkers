@@ -51,9 +51,7 @@ public class PlayerDataManager {
 
     public void load(PlayerData playerData) {
         Document document = mongoCollection.find(new Document("uuid", playerData.getUuid().toString())).first();
-        if (document != null) {
-            playerData.update(document);
-        }
+        playerData.update(document);
     }
 
     public void save(PlayerData playerData) {

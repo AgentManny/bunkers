@@ -20,7 +20,7 @@ import java.util.Map;
 @Setter
 public class PlayerInventoryData {
 
-    private final PlayerData playerData;
+    private transient final PlayerData playerData; // This shouldn't serialize
 
     private PotionEffect[] effects;
 

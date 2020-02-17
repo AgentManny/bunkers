@@ -32,10 +32,8 @@ public class PlayerBunker {
     }
 
     public void join(Player player) {
-        if (player != playerData.getPlayer()) {
-            player.sendMessage(ChatColor.GREEN + "Teleported to " + playerData.getUsername() + "'s bunker");
-            player.teleport(getSpawnLocation());
-        }
+        player.sendMessage(ChatColor.GREEN + "Teleported to " + playerData.getUsername() + "'s bunker");
+        player.teleport(getSpawnLocation());
     }
 
     public Location getSpawnLocation() {
@@ -47,11 +45,12 @@ public class PlayerBunker {
         for (Location location : bounds) {
             Block block = location.getBlock();
             Material type = block.getType();
-            if (type == Material.SKULL_ITEM) {
+            if (type == Material.SKULL ||type == Material.SKULL_ITEM) {
                 Skull skull = (Skull) block.getState();
                 spawnLocation = location.clone().add(0.5, 1.5, 0.5);
                 spawnLocation.setYaw(AngleUtil.faceToYaw(skull.getRotation()) + 90); // Fix location for YAW
                 location.getBlock().setType(Material.AIR);
+                System.out.println("Found!");
                 break; // Located spawn no need to continue
             }
         }

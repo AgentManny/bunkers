@@ -18,15 +18,17 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        PlayerData playerData = plugin.getPlayerDataManager().create(new PlayerData(player.getUniqueId(), player.getName()), false);
-        if (playerData.getInventoryData() != null) {
-            playerData.getInventoryData().apply(player);
-        }
 
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            playerData.setSyncing(false);
-            playerData.getPlayerBunker().join(player);
-        }, 10L);
+
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            PlayerData playerData = plugin.getPlayerDataManager().create(new PlayerData(player.getUniqueId(), player.getName()), false);
+            if (playerData.getInventoryData() != null) {
+                playerData.getInventoryData().apply(player);
+            }
+                playerData.setSyncing(false);
+                playerData.getPlayerBunker().join(player);
+
+        });
     }
 
     @EventHandler
