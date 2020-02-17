@@ -126,7 +126,7 @@ public class BunkersCore extends JavaPlugin {
         if (auth) {
             MongoCredential credential = MongoCredential.createCredential(
                     getConfig().getString("mongo.authentication.username"),
-                    "admin",
+                    getConfig().getString("mongo.authentication.database"),
                     getConfig().getString("mongo.authentication.password").toCharArray());
 
             mongoDatabase = new MongoClient(serverAddress, credential, MongoClientOptions.builder().build())
