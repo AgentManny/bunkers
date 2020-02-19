@@ -25,9 +25,8 @@ public class PlayerListener implements Listener {
             if (playerData.getInventoryData() != null) {
                 playerData.getInventoryData().apply(player);
             }
-                playerData.setSyncing(false);
-                playerData.getPlayerBunker().join(player);
-
+            playerData.setSyncing(false);
+            playerData.getPlayerBunker().join(player);
         });
     }
 

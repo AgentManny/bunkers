@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
+import org.minevale.bunkers.core.bunker.event.BunkerJoinEvent;
 import org.minevale.bunkers.core.player.PlayerData;
 import org.minevale.bunkers.core.util.AngleUtil;
 import org.minevale.bunkers.core.util.cuboid.Cuboid;
@@ -34,6 +35,7 @@ public class PlayerBunker {
     public void join(Player player) {
         player.sendMessage(ChatColor.GREEN + "Teleported to " + playerData.getUsername() + "'s bunker");
         player.teleport(getSpawnLocation());
+        BunkersCore.getInstance().getServer().getPluginManager().callEvent(new BunkerJoinEvent(player, this));
     }
 
     public Location getSpawnLocation() {

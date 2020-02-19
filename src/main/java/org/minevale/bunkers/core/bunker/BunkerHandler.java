@@ -1,11 +1,16 @@
 package org.minevale.bunkers.core.bunker;
 
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.ReplaceOptions;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import lombok.Getter;
-import org.bukkit.*;
-import org.bukkit.entity.Player;
+import org.bson.Document;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.minevale.bunkers.core.BunkersCore;
 import org.minevale.bunkers.core.player.PlayerData;
@@ -14,6 +19,7 @@ import org.minevale.bunkers.core.util.WorldEditUtils;
 import org.minevale.bunkers.core.util.cuboid.Cuboid;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 @Getter
 public class BunkerHandler {
@@ -28,12 +34,12 @@ public class BunkerHandler {
     private final File schematic;
     private final World world;
 
-    private int copies; // How many bunkers created instead of storing each bunker in a weak map
+    private int copies = 1; // How many bunkers created instead of storing each bunker in a weak map
+    private boolean requireSave = false;
 
     public BunkerHandler(BunkersCore plugin) {
         this.plugin = plugin;
 
-        this.copies = plugin.getConfig().getInt("bunker.copies", 1);
         this.gridSpacing = plugin.getConfig().getInt("bunker.grid-spacing", 150);
 
         String worldName = plugin.getConfig().getString("bunker.world.name", "bunkers");
@@ -46,6 +52,8 @@ public class BunkerHandler {
             world = new WorldCreator(worldName)
                     .environment(environment)
                     .type(WorldType.FLAT)
+                    .generatorSettings("0;0;0;0") // Simple way to make it void xd
+                    .generateStructures(false)
                     .createWorld();
         }
         this.world = world;
@@ -57,10 +65,28 @@ public class BunkerHandler {
             // plugin.getPluginLoader().disablePlugin(plugin); -- Commented out for debug
             return;
         }
+
+        Document document = plugin.getPlayerDataManager().getMongoCollection().find(Filters.eq("_id", "bunkers")).first();
+        if (document != null) {
+            this.copies = document.getInteger("copies", 1);
+            save(true);
+        }
+
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> save(false), TimeUnit.MINUTES.toMillis(10), TimeUnit.MINUTES.toMillis(10));
+    }
+
+    public void save(boolean force) {
+        if (force || requireSave) {
+            System.out.println("Saving " + copies + " bunkers");
+            plugin.getPlayerDataManager().getMongoCollection().replaceOne(Filters.eq("_id", "bunkers"), new Document("_id", "bunkers").append("copies", copies), new ReplaceOptions().upsert(true));
+            requireSave = false;
+        }
     }
 
     public PlayerBunker createBunker(PlayerData playerData) {
-        plugin.getConfig().set("bunker.copies", copies += 1);
+        copies += 1;
+        requireSave = true;
+
 
         int xStart = STARTING_POINT.getBlockX() + gridSpacing; // todo introduce a proper grid it'll continue incrementing Z loc
         int zStart = STARTING_POINT.getBlockZ() + (gridSpacing * copies);
@@ -77,17 +103,7 @@ public class BunkerHandler {
         Location lowerCorner = WorldEditUtils.vectorToLocation(pasteAt);
         Location upperCorner = WorldEditUtils.vectorToLocation(pasteAt.add(clipboard.getSize()));
 
-        PlayerBunker bunker = new PlayerBunker(playerData, new Cuboid(lowerCorner, upperCorner));
-
-        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
-            Player bukkitPlayer = playerData.getPlayer();
-            if (bukkitPlayer != null) {
-                bukkitPlayer.sendMessage(ChatColor.GREEN + "Bunker created. Teleporting...");
-                bukkitPlayer.teleport(bunker.getBounds().getCenter());
-            }
-        }, 20L);
-
-        return bunker;
+        return new PlayerBunker(playerData, new Cuboid(lowerCorner, upperCorner));
     }
 
 }

@@ -40,6 +40,7 @@ public class ChatCommand implements CommandExecutor {
                 }
 
                 ChatType type;
+                int radius = 0;
                 List<Player> players;
                 if (args[1].equalsIgnoreCase("local")) {
                     if (!(sender instanceof Player)) {
@@ -50,8 +51,8 @@ public class ChatCommand implements CommandExecutor {
                     type = ChatType.LOCAL;
                     Player player = (Player) sender;
 
-                    int radius = BunkersCore.getInstance().getConfig().getInt("chat.clear-radius", 25);
-                    if (args.length > 3) {
+                    radius = BunkersCore.getInstance().getConfig().getInt("chat.clear-radius", 25);
+                    if (args.length > 2) {
                         try {
                             radius = Integer.parseInt(args[2]);
                         } catch (NumberFormatException e) {
@@ -91,8 +92,10 @@ public class ChatCommand implements CommandExecutor {
                     }
                 }
 
-                sender.sendMessage(ChatColor.GREEN + "Cleared " + ChatColor.WHITE + players.size() + ChatColor.GREEN + " player(s) chat.");
-                if (type == ChatType.LOCAL) {
+                friendlyMessage.remove(sender.getName());
+
+                sender.sendMessage(ChatColor.GREEN + "Cleared " + ChatColor.WHITE + players.size() + ChatColor.GREEN + " player(s) chat" + (type == ChatType.LOCAL ? " within " + radius + " blocks" : ".") + ".");
+                if (!friendlyMessage.isEmpty() && type == ChatType.LOCAL) {
                     sender.sendMessage(ChatColor.GREEN + "Players cleared: " + ChatColor.WHITE + Strings.join(friendlyMessage, ", "));
                 }
 

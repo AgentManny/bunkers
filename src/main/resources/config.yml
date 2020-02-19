@@ -18,14 +18,13 @@ trade:
   expire-time: 30 # seconds
 bunker:
   grid-spacing: 150
-  copies: 1 # DO NOT CHANGE THIS WILL OVERRIDE OTHER PLAYER BUNKERS
   schematic: "example"
   world:
     name: bunkers
     environment: NORMAL #[NORMAL, NETHER, THE_END] -- Alters the sky
 currency:
   items:
-    nugget:
+    nuggets:
       name: "&6Nuggets"
       lore:
         - "&7Golden Nuggets"

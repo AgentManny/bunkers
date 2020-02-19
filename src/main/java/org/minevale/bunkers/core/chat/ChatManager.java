@@ -20,6 +20,7 @@ public class ChatManager {
     private ChatType chatMode;
 
     private Map<Integer, ChatColor> localChatRadius = new LinkedHashMap<>();
+    private int maxDistance = 0;
 
     public ChatManager(BunkersCore plugin) {
         this.plugin = plugin;
@@ -34,6 +35,9 @@ public class ChatManager {
                 .map(Integer::parseInt)
                 .sorted(Integer::compareTo)
                 .forEach(value -> {
+                    if (maxDistance < value) {
+                        maxDistance = value;
+                    }
                     ChatColor color = ChatColor.valueOf(config.getString("chat.local-distance." + value));
                     localChatRadius.put(value, color);
                 });
@@ -54,4 +58,5 @@ public class ChatManager {
         plugin.getConfig().set("chat.mode", chatMode.id());
 
     }
+
 }

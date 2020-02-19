@@ -58,6 +58,7 @@ public class PlayerData {
 
         if (document.containsKey("inventory")) {
             this.inventoryData = PlayerInventoryData.deserialize(document.get("inventory", Document.class).toJson()); // Should try to simplify
+            inventoryData.setPlayerData(this);
         }
 
         if (document.containsKey("bunker")) {

@@ -20,7 +20,7 @@ import java.util.Map;
 @Setter
 public class PlayerInventoryData {
 
-    private transient final PlayerData playerData; // This shouldn't serialize
+    @Setter private transient PlayerData playerData; // This shouldn't serialize
 
     private PotionEffect[] effects;
 
@@ -179,6 +179,11 @@ public class PlayerInventoryData {
         Validate.noNullElements(items, "Item cannot be null");
         HashMap<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 
+        Player bukkitPlayer = playerData.getPlayer();
+        if (bukkitPlayer != null) {
+            return bukkitPlayer.getInventory().addItem(items);
+        }
+
         /* TODO: some optimization
          *  - Create a 'firstPartial' with a 'fromIndex'
          *  - Record the lastPartial per Material
@@ -236,11 +241,6 @@ public class PlayerInventoryData {
                     item.setAmount(amount + partialAmount - maxAmount);
                 }
             }
-        }
-
-        Player bukkitPlayer = playerData.getPlayer();
-        if (bukkitPlayer != null) {
-            bukkitPlayer.getInventory().addItem(items);
         }
         return leftover;
     }
@@ -376,6 +376,11 @@ public class PlayerInventoryData {
     }
 
     public HashMap<Integer, ItemStack> removeItem(ItemStack... items) {
+        Player bukkitPlayer = playerData.getPlayer();
+        if (bukkitPlayer != null) {
+            return bukkitPlayer.getInventory().removeItem(items);
+        }
+
         Validate.notNull(items, "Items cannot be null");
         HashMap<Integer, ItemStack> leftover = new HashMap<Integer, ItemStack>();
 

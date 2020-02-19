@@ -51,6 +51,13 @@ public enum CurrencyType {
             item.setItemMeta(meta);
             balance.setItem(item);
         }
+
+        for (CurrencyType type : CurrencyType.values()) {
+            if (type.getItem() == null) {
+
+                System.out.println("WARNING " + type.getId() + " cannot be parsed");
+            }
+        }
     }
 
 

@@ -17,10 +17,12 @@ import org.bukkit.potion.PotionEffect;
 import org.minevale.bunkers.core.api.BunkersApi;
 import org.minevale.bunkers.core.api.BunkersCoreApi;
 import org.minevale.bunkers.core.bunker.BunkerHandler;
+import org.minevale.bunkers.core.chat.ChatManager;
 import org.minevale.bunkers.core.command.DebugCommand;
 import org.minevale.bunkers.core.command.TradeCommand;
 import org.minevale.bunkers.core.command.bunker.BunkerCommand;
 import org.minevale.bunkers.core.command.economy.EconomyCommand;
+import org.minevale.bunkers.core.listener.BorderListener;
 import org.minevale.bunkers.core.listener.PlayerSyncListener;
 import org.minevale.bunkers.core.player.PlayerDataManager;
 import org.minevale.bunkers.core.player.currencies.CurrencyType;
@@ -53,6 +55,8 @@ public class BunkersCore extends JavaPlugin {
     private PlayerDataManager playerDataManager;
     private TradeManager tradeManager;
 
+    private ChatManager chatManager;
+
     public void onEnable() {
         instance = this;
 
@@ -73,16 +77,17 @@ public class BunkersCore extends JavaPlugin {
 
     public void save(boolean force) {
         playerDataManager.save(force);
+        bunkerHandler.save(force);
         saveConfig();
     }
 
     private void registerManagers() {
         CurrencyType.init(getConfig()); // Load currency items from config
 
-        this.bunkerHandler = new BunkerHandler(this);
         this.playerDataManager = new PlayerDataManager(this);
+        this.bunkerHandler = new BunkerHandler(this);
         this.tradeManager = new TradeManager(this);
-
+        this.chatManager = new ChatManager(this);
     }
 
     private void registerCommands() {
@@ -94,7 +99,8 @@ public class BunkersCore extends JavaPlugin {
 
     private void registerListeners() {
         Arrays.asList(
-                new PlayerSyncListener(this)
+                new PlayerSyncListener(this),
+                new BorderListener(this)
         ).forEach(listener -> getServer().getPluginManager().registerEvents(listener, this));
     }
 

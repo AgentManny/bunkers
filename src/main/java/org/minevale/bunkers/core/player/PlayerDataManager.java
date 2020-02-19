@@ -3,6 +3,7 @@ package org.minevale.bunkers.core.player;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
+import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,11 +19,11 @@ public class PlayerDataManager {
     private BunkersCore plugin;
 
     private final Map<UUID, PlayerData> playerMap = new HashMap<>();
-    private MongoCollection<Document> mongoCollection;
+    @Getter private MongoCollection<Document> mongoCollection;
 
     public PlayerDataManager(BunkersCore plugin) {
         this.plugin = plugin;
-        mongoCollection = plugin.getMongoDatabase().getCollection("players");
+        mongoCollection = plugin.getMongoDatabase().getCollection("bunkers");
 
         plugin.getServer().getPluginManager().registerEvents(new PlayerListener(plugin), plugin);
     }
