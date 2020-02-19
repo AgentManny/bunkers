@@ -60,7 +60,6 @@ public enum Border {
                     Location center = bunker.getBounds().getCenter();
                     Border.getPackets(Border.BLUE, center.getX(), center.getZ(), bunker.getBounds().getSizeX() * bunker.getBounds().getSizeZ())
                             .forEach(((CraftPlayer) player).getHandle().playerConnection::sendPacket);
-                    System.out.println("Completed");
                 }
             }
 

@@ -52,7 +52,6 @@ public class PlayerBunker {
                 spawnLocation = location.clone().add(0.5, 1.5, 0.5);
                 spawnLocation.setYaw(AngleUtil.faceToYaw(skull.getRotation()) + 90); // Fix location for YAW
                 location.getBlock().setType(Material.AIR);
-                System.out.println("Found!");
                 break; // Located spawn no need to continue
             }
         }
