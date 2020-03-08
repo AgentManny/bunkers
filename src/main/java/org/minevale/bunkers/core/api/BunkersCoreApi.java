@@ -44,6 +44,8 @@ public class BunkersCoreApi implements BunkersApi {
         Player bukkitPlayer = player.getPlayer();
         if (bukkitPlayer != null) {
             bukkitPlayer.updateInventory();
+        } else {
+            player.save();
         }
         return balanceBefore;
     }
@@ -59,6 +61,8 @@ public class BunkersCoreApi implements BunkersApi {
         Player bukkitPlayer = player.getPlayer();
         if (bukkitPlayer != null) {
             bukkitPlayer.updateInventory();
+        } else {
+            player.save();
         }
         return balanceBefore;
     }
@@ -72,6 +76,13 @@ public class BunkersCoreApi implements BunkersApi {
             player.getInventoryData().update(player);
             return amount;
         }
+
+        Player bukkitPlayer = player.getPlayer();
+        if (bukkitPlayer != null) {
+            bukkitPlayer.updateInventory();
+        } else {
+            player.save();
+        }
         throw new InventoryFullException(player, item);
     }
 
@@ -83,6 +94,12 @@ public class BunkersCoreApi implements BunkersApi {
         }
 
         player.getInventoryData().removeAmount(balance.getType(), amount);
+        Player bukkitPlayer = player.getPlayer();
+        if (bukkitPlayer != null) {
+            bukkitPlayer.updateInventory();
+        } else {
+            player.save();
+        }
         return amount;
     }
 

@@ -26,7 +26,7 @@ public class EconomyBalanceArgument implements CommandArgument {
         for (CurrencyType balance : CurrencyType.values()) {
             sender.sendMessage(ChatColor.GREEN + balance.getFriendlyName() + ": " + ChatColor.WHITE + playerData.getBalance(balance));
         }
-        sender.sendMessage(ChatColor.GREEN + "- - Total balance: " + playerData.getBalance() + " - -");
+        sender.sendMessage(ChatColor.GREEN + "- - Total (calculated) balance: " + playerData.getTrueBalance() + " - -");
     }
 
     @Override

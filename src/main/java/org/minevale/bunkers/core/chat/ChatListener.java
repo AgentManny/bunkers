@@ -22,6 +22,7 @@ public class ChatListener implements Listener {
         Player player = event.getPlayer();
         if (chatManager.isChatLock() && !player.hasPermission("minevale.chatlock.bypass")) {
             player.sendMessage(ChatColor.RED + "Chat is currently locked.");
+            event.setCancelled(true);
             return;
         }
 

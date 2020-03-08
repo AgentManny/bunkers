@@ -10,6 +10,7 @@ import org.minevale.bunkers.core.BunkersCore;
 
 public class TradeCommand implements CommandExecutor {
 
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
@@ -30,6 +31,11 @@ public class TradeCommand implements CommandExecutor {
 
         if (player == target) {
             sender.sendMessage(ChatColor.RED + "You can't trade with yourself.");
+            return true;
+        }
+
+        if (BunkersCore.getInstance().getTradeManager().getTradeRequest(player) != null) {
+            sender.sendMessage(ChatColor.RED + "You already have a pending trade request.");
             return true;
         }
 

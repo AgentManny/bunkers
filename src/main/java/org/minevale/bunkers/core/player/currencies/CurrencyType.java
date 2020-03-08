@@ -19,12 +19,14 @@ import java.util.Set;
 @AllArgsConstructor
 public enum CurrencyType {
 
-    COINS("coins", Material.DOUBLE_PLANT, null),
-    NUGGETS("nuggets", Material.GOLD_NUGGET, null),
-    BARS("bars", Material.GOLD_INGOT, null);
+    COINS("coins", Material.DOUBLE_PLANT, 1, null),
+    NUGGETS("nuggets", Material.GOLD_NUGGET, 64, null),
+    BARS("bars", Material.GOLD_INGOT, 4096, null);
 
     private final String id;
     private final Material type;
+
+    private int value;
 
     @Setter private ItemStack item;
 

@@ -115,7 +115,18 @@ public class PlayerData {
     public int getBalance() {
         recalculateBalance(); // Prevent too many updates
         AtomicInteger amount = new AtomicInteger();
-        balanceMap.forEach((balance, value) -> amount.addAndGet(value));
+        balanceMap.forEach((balance, value) -> {
+            amount.addAndGet(value);
+        });
+        return amount.get();
+    }
+
+    public int getTrueBalance() {
+        recalculateBalance(); // Prevent too many updates
+        AtomicInteger amount = new AtomicInteger();
+        balanceMap.forEach((balance, value) -> {
+            amount.addAndGet(value * balance.getValue());
+        });
         return amount.get();
     }
 

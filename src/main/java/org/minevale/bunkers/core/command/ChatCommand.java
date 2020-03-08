@@ -1,10 +1,12 @@
 package org.minevale.bunkers.core.command;
 
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.libs.joptsimple.internal.Strings;
 import org.bukkit.entity.Player;
 import org.minevale.bunkers.core.BunkersCore;
@@ -88,6 +90,7 @@ public class ChatCommand implements CommandExecutor {
                         for (int i = 0; i < 100; i++) {
                             other.sendMessage(" ");
                         }
+                        other.sendMessage(ChatColor.YELLOW + "Your chat has been cleared.");
                         friendlyMessage.add(other.getName());
                     }
                 }
@@ -113,8 +116,7 @@ public class ChatCommand implements CommandExecutor {
                 if (args[1].equalsIgnoreCase("global")) {
                     boolean newValue = !chatManager.isChatLock();
                     chatManager.setChatLock(newValue);
-
-                    sender.sendMessage((newValue ? ChatColor.RED : ChatColor.GREEN) + "You have " + (newValue ? "locked" : "unlocked") + " global chat.");
+                    Bukkit.broadcastMessage((newValue ? ChatColor.RED : ChatColor.GREEN) + (sender instanceof ConsoleCommandSender ? "Console" : sender.getName()) + " has " + (newValue ? "locked" : "unlocked") + " global chat.");
                 } else {
                     sender.sendMessage(ChatColor.RED + "You can only lock global chat.");
                 }

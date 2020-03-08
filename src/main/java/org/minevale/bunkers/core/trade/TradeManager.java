@@ -65,9 +65,14 @@ public class TradeManager {
         long alive = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(expireTime);
 
         PlayerTradeRequest tradeRequest = new PlayerTradeRequest(requester.getUniqueId(), target.getUniqueId(), alive);
-
+        String targetName = target.getName();
         playerTradeRequests.add(tradeRequest);
-        BunkersCore.getInstance().getServer().getScheduler().runTaskLater(BunkersCore.getInstance(), () -> playerTradeRequests.remove(tradeRequest), expireTime * 20L);
+        plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            if (requester != null) {
+                requester.sendMessage(ChatColor.RED + "Your trade request to " + targetName + " has expired.");
+            }
+            playerTradeRequests.remove(tradeRequest);
+        }, expireTime * 20L);
     }
 
     /**
