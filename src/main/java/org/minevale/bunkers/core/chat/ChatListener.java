@@ -31,18 +31,20 @@ public class ChatListener implements Listener {
 
         ChatColor messageColor = null;
         for (Player other : new ArrayList<>(event.getRecipients())) {
-            int distance = (int) player.getLocation().distance(other.getLocation());
-            for (Map.Entry<Integer, ChatColor> entry : chatManager.getLocalChatRadius().entrySet()) {
-                if (distance < entry.getKey()) {
-                    messageColor = entry.getValue();
-                    break;
+            if (player.getWorld().getName().equalsIgnoreCase(other.getWorld().getName())) {
+                int distance = (int) player.getLocation().distance(other.getLocation());
+                for (Map.Entry<Integer, ChatColor> entry : chatManager.getLocalChatRadius().entrySet()) {
+                    if (distance < entry.getKey()) {
+                        messageColor = entry.getValue();
+                        break;
+                    }
                 }
-            }
 
-            if ((distance < chatManager.getMaxDistance()) && messageColor != null) {
-                other.sendMessage(String.format(event.getFormat(), event.getPlayer().getDisplayName(), messageColor + event.getMessage()));
-            } else {
-                event.getRecipients().remove(other); // Plugin compatibility
+                if ((distance < chatManager.getMaxDistance()) && messageColor != null) {
+                    other.sendMessage(String.format(event.getFormat(), event.getPlayer().getDisplayName(), messageColor + event.getMessage()));
+                } else {
+                    event.getRecipients().remove(other); // Plugin compatibility
+                }
             }
         }
     }
