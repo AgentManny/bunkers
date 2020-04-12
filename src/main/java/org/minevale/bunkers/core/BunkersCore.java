@@ -32,6 +32,7 @@ import org.minevale.bunkers.core.util.serializer.LocationAdapter;
 import org.minevale.bunkers.core.util.serializer.PotionEffectAdapter;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Getter
 public class BunkersCore extends JavaPlugin {
@@ -135,7 +136,7 @@ public class BunkersCore extends JavaPlugin {
                     getConfig().getString("mongo.authentication.database"),
                     getConfig().getString("mongo.authentication.password").toCharArray());
 
-            mongoDatabase = new MongoClient(serverAddress, credential, MongoClientOptions.builder().build())
+            mongoDatabase = new MongoClient(serverAddress, Collections.singletonList(credential))
                     .getDatabase(database);
         } else {
             mongoDatabase = new MongoClient(new ServerAddress(data[0], Integer.parseInt(data[1]))).getDatabase(database);
